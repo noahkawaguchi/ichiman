@@ -126,6 +126,30 @@ def new_data(
 
 # menu option helper functions
 
+def read_chosen_file() -> Tuple[List[dt.date], List[dt.timedelta]]:
+    """Prompt the user to select an existing habit.
+    Read and return the data for that habit.
+    """
+    # Prompt the user to select an existing habit
+    existing_CSVs = glob.glob('*.csv')
+    print("The habits you're currently tracking are:")
+    for filename in existing_CSVs:
+        print(filename[:-4])
+    print()
+    while True:
+        chosen_filename = input('Which one would you like to use? ') + '.csv'
+        print()
+        if chosen_filename in existing_CSVs:
+            break
+        else:
+            print("Habit not found. Please enter one of the above options.")
+            print()
+    
+    # Read and return the data from the CSV file corresponding to the
+    # user's choice.
+    dates, durations = read_csv(chosen_filename)
+    return dates, durations
+
 def avg_duration_str(durations: List[dt.timedelta]) -> str:
     """Calculate the mean of the provided durations.
     Return the result as a human-readable string.
@@ -252,23 +276,8 @@ def calculate_avg() -> None:
     tracking and the number of days to calculate the average for. 
     Print the average as a human-readable string.
     """
-     # Prompt the user to select an existing habit
-    existing_CSVs = glob.glob('*.csv')
-    print("The habits you're currently tracking are:")
-    for filename in existing_CSVs:
-        print(filename[:-4])
-    print()
-    while True:
-        chosen_filename = input('Which one would you like to '
-                                'calculate the average for? ') + '.csv'
-        print()
-        if chosen_filename in existing_CSVs:
-            break
-        else:
-            print("Habit not found. Please enter one of the above options.")
-            print()
-    
-    dates, durations = read_csv(chosen_filename)
+    # Get the data for a habit of the user's choosing.
+    dates, durations = read_chosen_file()
 
     # Prompt the user for the number of days to calculate the average 
     # for and print the result.
@@ -295,23 +304,8 @@ def goal_progress() -> None:
     tracking and for their goal number of hours. Print information on 
     how much they have already completed and how far they have left to go.
     """
-    # Prompt the user to select an existing habit
-    existing_CSVs = glob.glob('*.csv')
-    print("The habits you're currently tracking are:")
-    for filename in existing_CSVs:
-        print(filename[:-4])
-    print()
-    while True:
-        chosen_filename = input('Which one would you like to '
-                                'calculate goal progress for? ') + '.csv'
-        print()
-        if chosen_filename in existing_CSVs:
-            break
-        else:
-            print("Habit not found. Please enter one of the above options.")
-            print()
-
-    dates, durations = read_csv(chosen_filename)
+    # Get the data for a habit of the user's choosing.
+    dates, durations = read_chosen_file()
 
     # Calculate how much the user has already completed and how much
     # they complete per day on average.
@@ -363,23 +357,10 @@ def create_graph() -> None:
     """Prompt the user to select one of the habits they're currently
     tracking and display a graph of the data.
     """
-    # Prompt the user to select an existing habit
-    existing_CSVs = glob.glob('*.csv')
-    print("The habits you're currently tracking are:")
-    for filename in existing_CSVs:
-        print(filename[:-4])
-    print()
-    while True:
-        chosen_filename = input('Which one would you like to graph? ') + '.csv'
-        print()
-        if chosen_filename in existing_CSVs:
-            break
-        else:
-            print("Habit not found. Please enter one of the above options.")
-            print()
+    # Get the data for a habit of the user's choosing.
+    dates, durations = read_chosen_file()
     
     # Graph the data for the chosen habit
-    dates, durations = read_csv(chosen_filename)
     graph_data(dates, durations)
     
 
