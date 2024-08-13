@@ -2,7 +2,7 @@
 
 （日本語版は英語版の下にあります。）
 
-Ichiman (pronounced "eechee-mahn," not "itchy man") is a basic daily habit tracker command line program. However, instead of just a check box of whether you have completed the habit, it is based on recording the amount of time spent each day on a given task and gaining insights over time. Although "deliberate practice" is more important than the raw number of hours spent, understanding how we spend our time day to day is also undeniably crucial to optimizing personal growth. 
+Ichiman (pronounced "eechee-mahn") is a basic daily habit tracker command line program. However, instead of just a check box of whether you have completed the habit, it is based on recording the amount of time spent each day on a given task and gaining insights over time. Although "deliberate practice" is more important than the raw number of hours spent, understanding how we spend our time day to day is also undeniably crucial to optimizing personal growth. 
 
 "Ichiman" simply means "ten thousand" in Japanese (一万). Although Malcolm Gladwell's 10,000-hour rule may not be the best guide in all situations, I decided to incorporate it in the name. 
 
@@ -18,15 +18,12 @@ Ichiman (pronounced "eechee-mahn," not "itchy man") is a basic daily habit track
 - Keep track of the amount of time spent on different habits each day
 - Calculate averages
 - Calculate progress toward goals
-- Create basic graphs
-
-### Planned Features
-- Improve the graphing
-- Add more advanced calculations
+- Create graphs that are responsive to the amount of data
 
 ### Potential Features Under Consideration
+- GUI (tkinter)
+- More advanced calculations
 - Add a settings option to save preferences
-- Basic GUI
 - Full support for Japanese
 
 ---
@@ -49,14 +46,11 @@ Ichiman (pronounced "eechee-mahn," not "itchy man") is a basic daily habit track
 - 日ごとに習慣に費やした時間を記録
 - 平均を計算
 - 目標への進歩を計算
-- 簡単なグラフを作る
-
-### 計画している機能
-- より分かりやすいグラフ
-- より複雑な計算
+- データの量によってスタイルが変わるグラフを作る
 
 ### 検討している機能
+- GUI (tkinter)
+- より複雑な計算
 - 「設定」のような機能
-- 簡単なGUI
 - 全体的に日本語での利用を可能にする（現在は英語のみ）
 
