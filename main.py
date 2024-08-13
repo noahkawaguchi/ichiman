@@ -71,146 +71,6 @@ def append_csv(
         print('Error: file not found')
 
 
-# statistics and graphing functions
-
-def avg_duration_str(durations: List[dt.timedelta]) -> str:
-    """Calculate the mean of the provided durations.
-    Return the result as a human-readable string.
-    Ex: "2 hours and 35 minutes"; "1 minute"
-    """
-    avg_delta = sum(durations, dt.timedelta(0)) / len(durations)
-    total_minutes = int(avg_delta.total_seconds() / 60)
-    hours, minutes = divmod(total_minutes, 60)
-
-    if hours == 0:
-        if minutes == 0:
-            readable = '0 minutes'
-        elif minutes == 1:
-            readable = '1 minute'
-        else:
-            readable = f'{minutes} minutes'
-    elif hours == 1:
-        if minutes == 0:
-            readable = '1 hour'
-        elif minutes == 1:
-            readable = '1 hour and 1 minute'
-        else:
-            readable = f'1 hour and {minutes} minutes'
-    else:
-        if minutes == 0:
-            readable = f'{hours} hours'
-        elif minutes == 1:
-            readable = f'{hours} hours and 1 minute'
-        else:
-            readable = f'{hours} hours and {minutes} minutes'
-    
-    return readable
-
-def find_avg(durations: List[dt.timedelta]) -> None:
-    """Prompt the user for the number of days to calculate the average 
-    for. Print the average as a human-readable string.
-    """
-    while True:
-        try:
-            days = int(input('For how many days would you like to '
-                             'calculate the average? '))
-            print()
-            if days > len(durations):
-                days = len(durations)
-                print(f'You only have {days} days recorded.')
-            avg_str = avg_duration_str(durations[-days:])
-            print((f'The average for the last {days} recorded days is '
-                   f'{avg_str}.'))
-            print()
-            break
-        except ValueError:
-            print()
-            print('Invalid input. Please enter a number only.')
-            print()
-
-def goal_progress(durations: List[dt.timedelta]) -> None:
-    """Prompt the user for their goal number of hours and print
-    information on how much they have already completed and how far they
-    have left to go.
-    """
-    # Calculate how much the user has already completed and how much
-    # they complete per day on average.
-    time_completed = sum(durations, dt.timedelta(0))
-    hours_completed = time_completed.total_seconds() / 3600
-    avg_delta = sum(durations, dt.timedelta(0)) / len(durations)
-    avg_hours = avg_delta.total_seconds() / 3600
-
-    # Get the user's goal number of hours.
-    print(("A common goal is 10,000 hours, popularized by Malcolm "
-           "Gladwell. You can use that number if you can't think of "
-           "anything better, but many people don't actually need that "
-           "long to achieve what they want to achieve."))
-    print()
-    while True:
-        try:
-            user_goal = int(
-                input("What's your goal (in hours)? ").replace(',', '')
-                )
-            print()
-            if user_goal <= 0:
-                print("Invalid input. Please enter a positive number.")
-                print()
-            else:
-                break
-        except ValueError:
-            print()
-            print('Invalid input. Please enter a number only.')
-            print()
-    
-    # As long as the user hasn't already completed their goal, calculate
-    # and print how far they've come and how far they have left to go.
-    if user_goal <= hours_completed:
-        print("You've already reached your goal. Congrats!")
-        print()
-    else:
-        percent_complete = (hours_completed / user_goal) * 100
-        hours_remaining = user_goal - hours_completed
-        days_remaining = hours_remaining / avg_hours
-        years_remaining = days_remaining / 365
-        print((f'You have completed {hours_completed:.1f} out of {user_goal} '
-            f'hours, or {percent_complete:.0f} percent. If you maintain '
-            f'your average so far of {avg_hours:.1f} hours per day, it '
-            f'will take {days_remaining:.0f} more days, or '
-            f'{years_remaining:.2f} years, to reach your goal.'))
-        print()
-
-def graph_data(dates: List[dt.date], durations: List[dt.timedelta]) -> None:
-    """Show a line graph of the provided dates and durations."""
-
-    # Convert timedeltas into minutes
-    minutes = [int(duration.total_seconds() / 60) for duration in durations]
-    
-    # Use minutes for 2 hours and under, otherwise use hours
-    if max(minutes) <= 120:
-        y_durations = minutes
-        unit = 'Minutes'
-    else:
-        y_durations = [minutes_duration / 60 for minutes_duration in minutes]
-        unit = 'Hours'
-    
-    # Set up a graph
-    plt.figure(figsize=(7,5), dpi=150)
-    plt.plot(dates, y_durations, marker='o')
-    plt.title('Dates and Durations')
-    plt.xlabel('Dates')
-    plt.ylabel(f'Durations ({unit})')
-
-    # Use AutoDateLocator to automatically select appropriate date intervals
-    locator = mdates.AutoDateLocator()
-    plt.gca().xaxis.set_major_locator(locator)
-
-    # Use ConciseDateFormatter to make the date labels more readable
-    plt.gca().xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
-
-    plt.grid(True)
-    plt.show()
-
-
 # user input functions
 
 def get_user_duration(date_in_question: dt.date) -> dt.timedelta:
@@ -262,6 +122,73 @@ def new_data(
         print('Habit tracked!')
         print()
         return new_dates, new_durations
+
+
+# menu option helper functions
+
+def avg_duration_str(durations: List[dt.timedelta]) -> str:
+    """Calculate the mean of the provided durations.
+    Return the result as a human-readable string.
+    Ex: "2 hours and 35 minutes"; "1 minute"
+    """
+    avg_delta = sum(durations, dt.timedelta(0)) / len(durations)
+    total_minutes = int(avg_delta.total_seconds() / 60)
+    hours, minutes = divmod(total_minutes, 60)
+
+    if hours == 0:
+        if minutes == 0:
+            readable = '0 minutes'
+        elif minutes == 1:
+            readable = '1 minute'
+        else:
+            readable = f'{minutes} minutes'
+    elif hours == 1:
+        if minutes == 0:
+            readable = '1 hour'
+        elif minutes == 1:
+            readable = '1 hour and 1 minute'
+        else:
+            readable = f'1 hour and {minutes} minutes'
+    else:
+        if minutes == 0:
+            readable = f'{hours} hours'
+        elif minutes == 1:
+            readable = f'{hours} hours and 1 minute'
+        else:
+            readable = f'{hours} hours and {minutes} minutes'
+    
+    return readable
+
+def graph_data(dates: List[dt.date], durations: List[dt.timedelta]) -> None:
+    """Show a line graph of the provided dates and durations."""
+
+    # Convert timedeltas into minutes
+    minutes = [int(duration.total_seconds() / 60) for duration in durations]
+    
+    # Use minutes for 2 hours and under, otherwise use hours
+    if max(minutes) <= 120:
+        y_durations = minutes
+        unit = 'Minutes'
+    else:
+        y_durations = [minutes_duration / 60 for minutes_duration in minutes]
+        unit = 'Hours'
+    
+    # Set up a graph
+    plt.figure(figsize=(7,5), dpi=150)
+    plt.plot(dates, y_durations, marker='o')
+    plt.title('Dates and Durations')
+    plt.xlabel('Dates')
+    plt.ylabel(f'Durations ({unit})')
+
+    # Use AutoDateLocator to automatically select appropriate date intervals
+    locator = mdates.AutoDateLocator()
+    plt.gca().xaxis.set_major_locator(locator)
+
+    # Use ConciseDateFormatter to make the date labels more readable
+    plt.gca().xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
+
+    plt.grid(True)
+    plt.show()
 
 
 # menu option functions
@@ -320,9 +247,53 @@ def track_habit() -> None:
     new_dates, new_durations = new_data(old_dates, old_durations)
     append_csv(chosen_filename, new_dates, new_durations)
 
-def calculate_stats() -> None:
+def calculate_avg() -> None:
     """Prompt the user to select one of the habits they're currently
-    tracking and calculate insights based on the data.
+    tracking and the number of days to calculate the average for. 
+    Print the average as a human-readable string.
+    """
+     # Prompt the user to select an existing habit
+    existing_CSVs = glob.glob('*.csv')
+    print("The habits you're currently tracking are:")
+    for filename in existing_CSVs:
+        print(filename[:-4])
+    print()
+    while True:
+        chosen_filename = input('Which one would you like to '
+                                'calculate the average for? ') + '.csv'
+        print()
+        if chosen_filename in existing_CSVs:
+            break
+        else:
+            print("Habit not found. Please enter one of the above options.")
+            print()
+    
+    dates, durations = read_csv(chosen_filename)
+
+    # Prompt the user for the number of days to calculate the average 
+    # for and print the result.
+    while True:
+        try:
+            days = int(input('For how many days would you like to '
+                             'calculate the average? '))
+            print()
+            if days > len(durations):
+                days = len(durations)
+                print(f'You only have {days} days recorded.')
+            avg_str = avg_duration_str(durations[-days:])
+            print((f'The average for the last {days} recorded days is '
+                   f'{avg_str}.'))
+            print()
+            break
+        except ValueError:
+            print()
+            print('Invalid input. Please enter a number only.')
+            print()
+
+def goal_progress() -> None:
+    """Prompt the user to select one of the habits they're currently
+    tracking and for their goal number of hours. Print information on 
+    how much they have already completed and how far they have left to go.
     """
     # Prompt the user to select an existing habit
     existing_CSVs = glob.glob('*.csv')
@@ -332,32 +303,61 @@ def calculate_stats() -> None:
     print()
     while True:
         chosen_filename = input('Which one would you like to '
-                                'calculate stats for? ') + '.csv'
+                                'calculate goal progress for? ') + '.csv'
         print()
         if chosen_filename in existing_CSVs:
             break
         else:
             print("Habit not found. Please enter one of the above options.")
             print()
-    
-    # Prompt the user to choose which calculations they want to perform
+
     dates, durations = read_csv(chosen_filename)
-    print('What would you like to calculate?')
-    print('1 - Average Duration')
-    print('2 - Progress Toward Goal')
+
+    # Calculate how much the user has already completed and how much
+    # they complete per day on average.
+    time_completed = sum(durations, dt.timedelta(0))
+    hours_completed = time_completed.total_seconds() / 3600
+    avg_delta = sum(durations, dt.timedelta(0)) / len(durations)
+    avg_hours = avg_delta.total_seconds() / 3600
+
+    # Get the user's goal number of hours.
+    print(("A common goal is 10,000 hours, popularized by Malcolm "
+           "Gladwell. You can use that number if you can't think of "
+           "anything better, but many people don't actually need that "
+           "long to achieve what they want to achieve."))
     print()
     while True:
-        user_choice = input('Enter the number of your choice: ')
-        print()
-        if user_choice == '1':
-            find_avg(durations)
-            break
-        elif user_choice == '2':
-            goal_progress(durations)
-            break
-        else:
-            print('Invalid input. Please enter one of the above numbers.')
+        try:
+            user_goal = int(
+                input("What's your goal (in hours)? ").replace(',', '')
+                )
             print()
+            if user_goal <= 0:
+                print("Invalid input. Please enter a positive number.")
+                print()
+            else:
+                break
+        except ValueError:
+            print()
+            print('Invalid input. Please enter a number only.')
+            print()
+    
+    # As long as the user hasn't already completed their goal, calculate
+    # and print how far they've come and how far they have left to go.
+    if user_goal <= hours_completed:
+        print("You've already reached your goal. Congrats!")
+        print()
+    else:
+        percent_complete = (hours_completed / user_goal) * 100
+        hours_remaining = user_goal - hours_completed
+        days_remaining = hours_remaining / avg_hours
+        years_remaining = days_remaining / 365
+        print((f'You have completed {hours_completed:.1f} out of {user_goal} '
+            f'hours, or {percent_complete:.0f} percent. If you maintain '
+            f'your average so far of {avg_hours:.1f} hours per day, it '
+            f'will take {days_remaining:.0f} more days, or '
+            f'{years_remaining:.2f} years, to reach your goal.'))
+        print()
 
 def create_graph() -> None:
     """Prompt the user to select one of the habits they're currently
@@ -409,8 +409,9 @@ def main_menu(width: int) -> None:
     print('-' * width)
     print('1 - Start a New Habit')
     print('2 - Track an Existing Habit')
-    print('3 - Calculate Statistics')
-    print('4 - Create Graphs')
+    print('3 - Calculate Averages')
+    print('4 - Calculate Goal Progress')
+    print('5 - Create Graphs')
     print('0 - Quit')
     print()
 
@@ -433,8 +434,10 @@ def main():
         elif user_choice == '2':
             track_habit()
         elif user_choice == '3':
-            calculate_stats()
+            calculate_avg()
         elif user_choice == '4':
+            goal_progress()
+        elif user_choice == '5':
             create_graph()
         elif user_choice == '0':
             print('See you tomorrow!')
