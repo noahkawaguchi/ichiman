@@ -183,37 +183,6 @@ def avg_duration_str(durations: List[dt.timedelta]) -> str:
     
     return readable
 
-def graph_data(dates: List[dt.date], durations: List[dt.timedelta]) -> None:
-    """Show a line graph of the provided dates and durations."""
-
-    # Convert timedeltas into minutes
-    minutes = [int(duration.total_seconds() / 60) for duration in durations]
-    
-    # Use minutes for 2 hours and under, otherwise use hours
-    if max(minutes) <= 120:
-        y_durations = minutes
-        unit = 'Minutes'
-    else:
-        y_durations = [minutes_duration / 60 for minutes_duration in minutes]
-        unit = 'Hours'
-    
-    # Set up a graph
-    plt.figure(figsize=(7,5), dpi=150)
-    plt.plot(dates, y_durations, marker='o')
-    plt.title('Dates and Durations')
-    plt.xlabel('Dates')
-    plt.ylabel(f'Durations ({unit})')
-
-    # Use AutoDateLocator to automatically select appropriate date intervals
-    locator = mdates.AutoDateLocator()
-    plt.gca().xaxis.set_major_locator(locator)
-
-    # Use ConciseDateFormatter to make the date labels more readable
-    plt.gca().xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
-
-    plt.grid(True)
-    plt.show()
-
 
 # menu option functions
 
@@ -360,8 +329,33 @@ def create_graph() -> None:
     # Get the data for a habit of the user's choosing.
     dates, durations = read_chosen_file()
     
-    # Graph the data for the chosen habit
-    graph_data(dates, durations)
+    # Convert timedeltas into minutes
+    minutes = [int(duration.total_seconds() / 60) for duration in durations]
+    
+    # Use minutes for 2 hours and under, otherwise use hours
+    if max(minutes) <= 120:
+        y_durations = minutes
+        unit = 'Minutes'
+    else:
+        y_durations = [minutes_duration / 60 for minutes_duration in minutes]
+        unit = 'Hours'
+    
+    # Set up the graph
+    plt.figure(figsize=(7,5), dpi=150)
+    plt.plot(dates, y_durations, marker='o')
+    plt.title('Dates and Durations')
+    plt.xlabel('Dates')
+    plt.ylabel(f'Durations ({unit})')
+
+    # Use AutoDateLocator to automatically select appropriate date intervals
+    locator = mdates.AutoDateLocator()
+    plt.gca().xaxis.set_major_locator(locator)
+
+    # Use ConciseDateFormatter to make the date labels more readable
+    plt.gca().xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
+
+    plt.grid(True)
+    plt.show()
     
 
 # print-only functions
