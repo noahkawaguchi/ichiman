@@ -3,7 +3,8 @@ import datetime as dt
 from typing import List, Tuple
 import glob
 
-# requires installing matplotlib in a virtual environment
+# requires installing external packages (in a virtual environment)
+import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
@@ -335,17 +336,41 @@ def create_graph() -> None:
     # Use minutes for 2 hours and under, otherwise use hours
     if max(minutes) <= 120:
         y_durations = minutes
-        unit = 'Minutes'
+        y_unit = 'Minutes'
     else:
         y_durations = [minutes_duration / 60 for minutes_duration in minutes]
-        unit = 'Hours'
-    
-    # Set up the graph
+        y_unit = 'Hours'
+
+    # Create a DataFrame
+    df = pd.DataFrame({'Date': dates, 'Duration': y_durations})
+
+    # Ensure the 'Date' column is of datetime type
+    df['Date'] = pd.to_datetime(df['Date'])
+
+    # Set the 'Date' column as the index
+    df.set_index('Date', inplace=True)
+
+    # Resample the data by week and calculate the means for each week and month
+    weekly_average = df.resample('W').mean()
+    monthly_average = df.resample('ME').mean()
+
+    # Set up the graph depending on the size of the data set
     plt.figure(figsize=(7,5), dpi=150)
-    plt.plot(dates, y_durations, marker='o')
-    plt.title('Dates and Durations')
+    if len(dates) < 15:
+        plt.plot(dates, y_durations, color='red', marker='o', label='Daily Data')
+    elif len(dates) < 62:
+        plt.scatter(dates, y_durations, color='blue', marker='.', label='Daily Data')
+        plt.plot(weekly_average.index, weekly_average['Duration'], color='red', 
+                 marker='o', label='Weekly Averages')
+    else:
+        plt.scatter(dates, y_durations, color='gray', marker='.', label='Daily Data')
+        plt.plot(weekly_average.index, weekly_average['Duration'], color='blue', 
+                 marker='.', linestyle='--', label='Weekly Averages')
+        plt.plot(monthly_average.index, monthly_average['Duration'], 
+                 color='red', marker='o', label='Monthly Averages')
+    plt.title('Time Spent Per Day')
     plt.xlabel('Dates')
-    plt.ylabel(f'Durations ({unit})')
+    plt.ylabel(y_unit)
 
     # Use AutoDateLocator to automatically select appropriate date intervals
     locator = mdates.AutoDateLocator()
@@ -354,6 +379,7 @@ def create_graph() -> None:
     # Use ConciseDateFormatter to make the date labels more readable
     plt.gca().xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
 
+    plt.legend()
     plt.grid(True)
     plt.show()
     
