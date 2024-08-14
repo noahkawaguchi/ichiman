@@ -1,6 +1,7 @@
 # Standard library imports
 import datetime as dt
-import glob
+import os
+from glob import glob
 
 # Third party imports
 import pandas as pd
@@ -8,8 +9,8 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 # Local project imports
-import csv_utils
-from menu_helpers import get_user_duration, new_data, read_chosen_file, avg_duration_str
+from . import csv_utils
+from .menu_helpers import get_user_duration, new_data, read_chosen_file, avg_duration_str
 
 
 def new_habit() -> None:
@@ -17,12 +18,15 @@ def new_habit() -> None:
     habit of the same name that would be overwritten.
     Get the amount of time spent today and create a new CSV file.
     """
-    print("Let's start a new habit!")
-    print()
-
+    # Find all the CSV files in the sibling "data" directory.
+    data_dir = os.path.join(os.getcwd(), 'data')
+    csv_paths = glob(os.path.join(data_dir, '*.csv'))
+    existing_CSVs = [os.path.basename(csv) for csv in csv_paths]
+    
     # Prompt the user to enter a new filename until they provide one
     # that does not already exist.
-    existing_CSVs = glob.glob('*.csv')
+    print("Let's start a new habit!")
+    print()
     while True:
         user_habit_name = input('Enter the name of the new habit: ') + '.csv'
         print()
@@ -48,7 +52,12 @@ def track_habit() -> None:
     its data up to the present day.
     Append the data to the corresponding CSV file.
     """
-    existing_CSVs = glob.glob('*.csv')
+    # Find all the CSV files in the sibling "data" directory.
+    data_dir = os.path.join(os.getcwd(), 'data')
+    csv_paths = glob(os.path.join(data_dir, '*.csv'))
+    existing_CSVs = [os.path.basename(csv) for csv in csv_paths]
+
+    # Prompt the user to choose one of the habits.
     print("The habits you're currently tracking are:")
     for filename in existing_CSVs:
         print(filename[:-4])
@@ -62,6 +71,7 @@ def track_habit() -> None:
             print("Habit not found. Please enter one of the options above.")
             print()
 
+    # Update the data.
     old_dates, old_durations = csv_utils.read_csv(chosen_filename)
     new_dates, new_durations = new_data(old_dates, old_durations)
     csv_utils.append_csv(chosen_filename, new_dates, new_durations)

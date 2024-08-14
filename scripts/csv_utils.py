@@ -1,16 +1,19 @@
 import csv
 import datetime as dt
+from pathlib import Path
 from typing import List, Tuple
 
 def read_csv(filename: str) -> Tuple[List[dt.date], List[dt.timedelta]]:
-    """Read in the CSV file with the provided name 
-    and return lists of the dates and durations.
+    """Read in the CSV file with the provided name from the sibling
+    "data" directory.
+    Return lists of the dates and durations.
     """
     try:
-        with open(filename, mode='r', newline='') as csv_data:
+        script_dir = Path(__file__).parent
+        file_path = script_dir / '..' / 'data' / filename
+        with file_path.open(mode='r', newline='') as csv_data:
             csv_reader = csv.reader(csv_data)
             fields = next(csv_reader)
-            # print('Fields:', fields)
             dates = []
             durations = []
             for row in csv_reader:
@@ -26,7 +29,7 @@ def write_csv(
         filename: str, dates: List[dt.date], 
         durations: List[dt.timedelta]) -> None:
     """Format the provided dates and durations and write them to a new
-    CSV file with the given name.
+    CSV file with the given name in the sibing "data" directory.
     (Checking that the filename doesn't already exist to avoid 
     overwriting should be performed in a different function.)
     """
@@ -38,7 +41,9 @@ def write_csv(
         duration_str = f'{hours:02}:{minutes:02}'
         data.append([date_str, duration_str])
     
-    with open(filename, mode='w', newline='') as new_csv:
+    script_dir = Path(__file__).parent
+    file_path = script_dir / '..' / 'data' / filename
+    with file_path.open(mode='w', newline='') as new_csv:
         writer = csv.writer(new_csv)
         writer.writerows(data)
 
@@ -46,10 +51,12 @@ def append_csv(
         filename: str, dates: List[dt.date], 
         durations: List[dt.timedelta]) -> None:
     """Format the provided dates and durations and append them to the 
-    CSV file with the given name.
+    CSV file with the given name in the sibling "data" directory.
     """
     try:
-        with open(filename, mode='a', newline='') as existing_csv:
+        script_dir = Path(__file__).parent
+        file_path = script_dir / '..' / 'data' / filename
+        with file_path.open(mode='a', newline='') as existing_csv:
             csv_writer = csv.writer(existing_csv)
             data = []
             for date, duration in zip(dates, durations):

@@ -1,5 +1,5 @@
-from print_only import welcome, main_menu
-import menu_options as menu
+from scripts.print_only import welcome, main_menu
+import scripts.menu_options as menu
 
 def main():
     WIDTH = 30

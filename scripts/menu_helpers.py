@@ -1,8 +1,9 @@
 import datetime as dt
-import glob
+import os
+from glob import glob
 from typing import List, Tuple
 
-import csv_utils
+from . import csv_utils
 
 def get_user_duration(date_in_question: dt.date) -> dt.timedelta:
     """Prompt the user until they return a valid duration of time for 
@@ -58,8 +59,12 @@ def read_chosen_file() -> Tuple[List[dt.date], List[dt.timedelta]]:
     """Prompt the user to select an existing habit.
     Read and return the data for that habit.
     """
-    # Prompt the user to select an existing habit
-    existing_CSVs = glob.glob('*.csv')
+    # Find all the CSV files in the sibling "data" directory.
+    data_dir = os.path.join(os.getcwd(), 'data')
+    csv_paths = glob(os.path.join(data_dir, '*.csv'))
+    existing_CSVs = [os.path.basename(csv) for csv in csv_paths]
+    
+    # Prompt the user to select an existing habit.
     print("The habits you're currently tracking are:")
     for filename in existing_CSVs:
         print(filename[:-4])
