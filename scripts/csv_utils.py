@@ -29,7 +29,7 @@ def write_csv(
         filename: str, dates: List[dt.date], 
         durations: List[dt.timedelta]) -> None:
     """Format the provided dates and durations and write them to a new
-    CSV file with the given name in the sibing "data" directory.
+    CSV file with the given name in the sibling "data" directory.
     (Checking that the filename doesn't already exist to avoid 
     overwriting should be performed in a different function.)
     """
