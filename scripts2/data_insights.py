@@ -136,6 +136,7 @@ def display_data(df: pd.DataFrame) -> None:
         format_df = format_df.rename(columns={'duration': 'minutes'})
     else:
         format_df['duration'] = format_df['duration'] / 60
+        format_df['duration'] = format_df['duration'].round(1)
         format_df = format_df.rename(columns={'duration': 'hours'})
     
     st.dataframe(format_df, use_container_width=True)

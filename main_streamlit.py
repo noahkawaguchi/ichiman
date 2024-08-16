@@ -4,7 +4,7 @@ from glob import glob
 import streamlit as st
 import pandas as pd
 
-import scripts2.data_insights as data
+from scripts2.helpers import show_all_data_info
 
 st.set_page_config(
     page_title='ICHIMAN | duration-based habit tracker',
@@ -17,7 +17,6 @@ with c1:
     st.title('ICHIMAN')
     st.write(('###### *a duration-based habit tracker developed by '
               'Noah Kawaguchi*'))
-
 with c2:
     mode = st.radio(
         'Select a mode to begin:',
@@ -50,15 +49,20 @@ elif mode == 'Track an existing habit':
             'Upload a CSV file previously created with this app:', 
             type='csv',
             )
-        if uploaded_file is not None:
-            st.write('We have a file!')
-        
+    st.divider()
+    if uploaded_file is not None:
+        df = pd.read_csv(uploaded_file)
+        st.write('need to update data')
+        st.divider()
+        show_all_data_info(df)
+
 
 elif mode == 'Preview app features using test data':
-    data_dir = os.path.join(os.getcwd(), 'data')
+    # Get all the CSV filenames in the 'test_data' subdirectory and 
+    # convert them to strings with spaces and no extension
+    data_dir = os.path.join(os.getcwd(), 'test_data')
     csv_paths = glob(os.path.join(data_dir, '*.csv'))
     existing_CSVs = [os.path.basename(csv) for csv in csv_paths]
-
     def filename_to_habit_name(filename: str) -> str:
         return filename.removesuffix('.csv').replace('_', ' ')
     existing_habit_names = [filename_to_habit_name(csv) for csv in existing_CSVs]
@@ -75,25 +79,8 @@ elif mode == 'Preview app features using test data':
     st.divider()
 
     if selected_test_data != '(choose one)':
+        # Read in the CSV file corresponding to the chosen name
         filename = selected_test_data.replace(' ', '_') + '.csv'
-        df = pd.read_csv('data/' + filename)
+        df = pd.read_csv('test_data/' + filename)
 
-        # Ensure the 'date' column is of datetime type and the 
-        # 'duration' column of timedelta type.
-        df['date'] = pd.to_datetime(df['date'])
-        df['duration'] = pd.to_timedelta(df['duration'])
-
-        c1, c2 = st.columns([1, 2])
-        with c1:
-            st.write('#### Daily averages')
-            data.daily_averages(df)
-            st.divider()
-            st.write('#### Progress toward goal')
-            data.goal_progress(df)
-            st.divider()
-        with c2:
-            data.graph_data(df)
-        st.divider()
-        with st.expander('Show all days'):
-            data.display_data(df)
-
+        show_all_data_info(df)
