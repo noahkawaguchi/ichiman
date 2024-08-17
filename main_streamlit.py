@@ -30,7 +30,13 @@ with c2:
 
 st.divider()
 
-if mode == 'Start a new habit':
+if mode == '(welcome screen)':
+    st.write('#### Welcome — try out any of the modes above')
+    st.write('or...')
+    st.write('###### [Read more on GitHub](https://github.com/noahkawaguchi/ichiman)')
+    st.write('###### [Contact me through my website](https://www.noahkawaguchi.com/)')
+
+elif mode == 'Start a new habit':
 
     # Initialize a persistent session_state variable so the time entry 
     # interface can stay displayed
