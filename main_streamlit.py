@@ -4,7 +4,7 @@ from glob import glob
 import streamlit as st
 import pandas as pd
 
-from scripts2.helpers import show_all_data_info
+from scripts2.helpers import show_all_data_info, update_data
 
 st.set_page_config(
     page_title='ICHIMAN | duration-based habit tracker',
@@ -52,9 +52,12 @@ elif mode == 'Track an existing habit':
     st.divider()
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
-        st.write('need to update data')
+        updated_df = update_data(df)
         st.divider()
-        show_all_data_info(df)
+        if updated_df is None:
+            show_all_data_info(df)
+        else:
+            show_all_data_info(updated_df)
 
 
 elif mode == 'Preview app features using test data':
