@@ -1,10 +1,11 @@
 import os
+import datetime as dt
 from glob import glob
 
 import streamlit as st
 import pandas as pd
 
-from scripts2.helpers import show_all_data_info, update_data
+from scripts2.helpers import show_all_data_info, update_data, up_to_date_download
 
 st.set_page_config(
     page_title='ICHIMAN | duration-based habit tracker',
@@ -40,6 +41,8 @@ if mode == 'Start a new habit':
             st.write('New habit:',new_habit_name)
 
 elif mode == 'Track an existing habit':
+    
+    # Show a basic file upload interface
     c1, c2 = st.columns([1, 2])
     with c1:
         st.write('### Track an existing habit')
@@ -50,15 +53,40 @@ elif mode == 'Track an existing habit':
             type='csv',
             )
     st.divider()
+
+    # Read in the user's CSV file
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
-        updated_df = update_data(df)
-        st.divider()
-        if updated_df is None:
-            show_all_data_info(df)
-        else:
-            show_all_data_info(updated_df)
 
+        # Initialize session_state variables 
+        if 'tracking_df' not in st.session_state:
+            st.session_state.tracking_df = df.copy()
+        if 'up_to_date' not in st.session_state:
+            st.session_state.up_to_date = False
+
+        # Ensure 'date' has datetime objects and 'duration' has 
+        # timedelta objects
+        st.session_state.tracking_df['date'] = (
+            pd.to_datetime(st.session_state.tracking_df['date'])
+            )
+        st.session_state.tracking_df['duration'] = (
+            pd.to_timedelta(st.session_state.tracking_df['duration'])
+            )
+
+        # Update the session_state DataFrame
+        if not st.session_state.up_to_date:
+            st.session_state.tracking_df, st.session_state.up_to_date = (
+                update_data(df)
+                )
+        
+        # Show the download option and the data insights for the 
+        # up-to-date data.
+        # This needs to be another if, not an else, due to the way 
+        # streamlit reruns the code from top to bottom.
+        if st.session_state.up_to_date:
+            up_to_date_download(st.session_state.tracking_df)
+            st.divider()
+            show_all_data_info(st.session_state.tracking_df)
 
 elif mode == 'Preview app features using test data':
     # Get all the CSV filenames in the 'test_data' subdirectory and 
