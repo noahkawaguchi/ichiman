@@ -31,6 +31,91 @@ def show_all_data_info(df: pd.DataFrame) -> None:
     with st.expander('Show all days'):
         data.display_data(df_copy)
 
+
+def update_data3(df: pd.DataFrame, date_cursor: dt.date) -> pd.DataFrame:
+    """Given the currently recorded dates and durations, prompt the 
+    user to enter data for each day up to the present day. 
+    Return the data with every rerun of the page because of Streamlit's 
+    repeated top-down execution.
+    """
+    # Initialize new session_state variables for the parameters
+    if 'update_data_df' not in st.session_state:
+        st.session_state.update_data_df = df.copy()
+    if 'date_cursor' not in st.session_state:
+        st.session_state.date_cursor = date_cursor
+
+    # Ensure the 'date' column is of datetime type and the 'duration' 
+    # column of timedelta type
+    st.session_state.update_data_df['date'] = pd.to_datetime(
+        st.session_state.update_data_df['date']
+        )
+    st.session_state.update_data_df['duration'] = pd.to_timedelta(
+        st.session_state.update_data_df['duration']
+        )
+
+    # Check if the data needs to be updated
+    today = dt.datetime.today().date()
+    if st.session_state.date_cursor > today:
+        return st.session_state.update_data_df
+    else:
+        st.write('#### Your data is not up to date')
+
+        # Define the form container and write the date in question
+        duration_form = st.form('duration_form')
+        formatted_date = st.session_state.date_cursor.strftime('%a, %b %e, %Y')
+        duration_form.write(f'#### Enter the amount of time for {formatted_date}')
+
+        # Collect the hours and minutes from the user
+        c1, c2 = duration_form.columns(2)
+        with c1:
+            new_duration_hours = st.number_input(
+                'Hours (type or use − +):',
+                min_value=0,
+                max_value=23,
+                value=0,
+                step=1,
+                format='%d',
+            )
+        with c2:
+            new_duration_minutes = st.number_input(
+                'Minutes (type or use − +):',
+                min_value=0,
+                max_value=59,
+                value=0,
+                step=1,
+                format='%d',
+            )
+
+        def record_and_advance():
+            # Convert the user's input into a DataFrame
+            new_duration = dt.timedelta(hours=new_duration_hours,
+                                        minutes=new_duration_minutes)
+            new_row = pd.DataFrame({'date': [st.session_state.date_cursor],
+                                    'duration': [new_duration]})
+            new_row['date'] = pd.to_datetime(new_row['date'])
+            # Save the data to the session_state DataFrame
+            st.session_state.update_data_df = pd.concat(
+                [st.session_state.update_data_df, new_row],
+                ignore_index=True,
+                )
+            # Increment the date cursor
+            st.session_state.date_cursor += dt.timedelta(days=1)
+
+        duration_form.form_submit_button('Save', on_click=record_and_advance)
+
+        # Show the latest data as it is being updated
+        if len(st.session_state.update_data_df) > 0:
+            st.divider()
+            reversed_df = st.session_state.update_data_df.iloc[::-1]
+            data.display_data(reversed_df)
+
+        # Return a valid value to the caller function with every rerun 
+        # of the page
+        return st.session_state.update_data_df
+
+
+
+# Get rid of this one soon
 def update_data2(
         df: pd.DataFrame, date_cursor: dt.date
         ) -> Tuple[pd.DataFrame, bool]:
@@ -144,7 +229,6 @@ def update_data2(
         # get valid return values even before any user input.
         up_to_date = False
         return st.session_state.new_df, up_to_date
-
 
 # Get rid of this one soon
 def update_data(df: pd.DataFrame) -> Tuple[pd.DataFrame, bool]:
@@ -284,9 +368,11 @@ def up_to_date_download(df: pd.DataFrame) -> None:
     with c1:
         earliest_date = df['date'].iloc[0].date().strftime('%a, %b %e, %Y')
         latest_date = df['date'].iloc[-1].date().strftime('%a, %b %e, %Y')
-        st.write(f'#### This data is up to date from {earliest_date} to {latest_date}')
+        st.write('#### Your data is up to date!')
         if earliest_date == latest_date:
-            st.write("(You only have one day's worth of data)")
+            st.write(f'({latest_date})')
+        else:
+            st.write(f'(from {earliest_date} to {latest_date})')
 
     # Display a basic interface to download the CSV file 
     with c2:

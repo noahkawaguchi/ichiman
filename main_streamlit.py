@@ -5,7 +5,7 @@ from glob import glob
 import streamlit as st
 import pandas as pd
 
-from scripts2.helpers import show_all_data_info, update_data, up_to_date_download, update_data2
+from scripts2.helpers import show_all_data_info, update_data, up_to_date_download, update_data2, update_data3
 
 st.set_page_config(
     page_title='ICHIMAN | duration-based habit tracker',
@@ -15,9 +15,10 @@ st.set_page_config(
 
 c1, c2 = st.columns([2, 1])
 with c1:
-    st.title('ICHIMAN')
-    st.write(('###### *a duration-based habit tracker developed by '
-              'Noah Kawaguchi*'))
+    st.title('ichiman')
+    '[ee-chee-mon]　*noun*'
+    st.caption('1. the number ten thousand in Japanese \n2. a duration-'
+               'based habit tracker developed by Noah Kawaguchi')
 with c2:
     mode = st.radio(
         'Select a mode to begin:',
@@ -31,10 +32,10 @@ with c2:
 st.divider()
 
 if mode == '(welcome screen)':
-    st.write('#### Welcome — try out any of the modes above')
-    st.write('or...')
-    st.write('###### [Read more on GitHub](https://github.com/noahkawaguchi/ichiman)')
-    st.write('###### [Contact me through my website](https://www.noahkawaguchi.com/)')
+    '#### Welcome — try out any of the modes above'
+    'or...'
+    '###### [Read more on GitHub](https://github.com/noahkawaguchi/ichiman)'
+    '###### [Contact me through my website](https://www.noahkawaguchi.com/)'
 
 elif mode == 'Start a new habit':
 
@@ -43,14 +44,14 @@ elif mode == 'Start a new habit':
     if 'starting_new' not in st.session_state:
         st.session_state.starting_new = False
 
-    st.write('### Start a new habit')
-    st.write('A journey of ten thousand hours begins with a single day.')
+    '### Start a new habit'
+    'A journey of ten thousand hours begins with a single day.'
 
     # The button clears other habits and displays the duration entry 
     # interface 
     start_button = st.button(
         "Let's go!", 
-        on_click=lambda: st.session_state.clear(),
+        on_click=st.session_state.clear,
         )
     if start_button:
         st.session_state.starting_new = True
@@ -61,10 +62,11 @@ elif mode == 'Start a new habit':
     if st.session_state.starting_new:
         today = dt.datetime.today().date()
         empty_df = pd.DataFrame(columns=['date', 'duration'])
-        new_df, up_to_date = update_data2(empty_df, today)
+        new_df = update_data3(empty_df, today)
+        # new_df, dummy = update_data2(empty_df, today)
 
         # Display a download option and data insights
-        if up_to_date:
+        if len(new_df) > 0:
             up_to_date_download(new_df)
             st.divider()
             show_all_data_info(new_df)
@@ -92,8 +94,6 @@ elif mode == 'Track an existing habit':
         # Initialize session_state variables 
         if 'tracking_df' not in st.session_state:
             st.session_state.tracking_df = df.copy()
-        if 'up_to_date' not in st.session_state:
-            st.session_state.up_to_date = False
 
         # Ensure 'date' has datetime objects and 'duration' has 
         # timedelta objects
@@ -105,20 +105,16 @@ elif mode == 'Track an existing habit':
             )
 
         # Check if the data is up to date
-        latest_date = st.session_state.tracking_df['date'].iloc[-1].date()
         today = dt.datetime.today().date()
+        latest_date = st.session_state.tracking_df['date'].iloc[-1].date()
         if latest_date < today:
             # Update the session_state DataFrame
             next_date = latest_date + dt.timedelta(days=1)
-            st.session_state.tracking_df, st.session_state.up_to_date = (
-                update_data2(df, next_date)
-                )
-        else:
-            st.session_state.up_to_date = True
-        
-        # Once the data is up to date show the download option and the 
-        # data insights.
-        if st.session_state.up_to_date:
+            st.session_state.tracking_df = (update_data3(df, next_date))
+
+        # Check again due to Streamlit's execution flow
+        latest_date = st.session_state.tracking_df['date'].iloc[-1].date()
+        if latest_date >= today:
             up_to_date_download(st.session_state.tracking_df)
             st.divider()
             show_all_data_info(st.session_state.tracking_df)
