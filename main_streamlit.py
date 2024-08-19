@@ -80,7 +80,7 @@ elif mode == 'Track an existing habit':
         st.write('Nice to see you again.')
     with c2:
         uploaded_file = st.file_uploader(
-            'Upload a CSV file previously created with this app:', 
+            'Upload a CSV file previously created with this site:', 
             type='csv',
             on_change=lambda: st.session_state.clear()
             )
@@ -89,35 +89,43 @@ elif mode == 'Track an existing habit':
 
     # Read in the user's CSV file
     if uploaded_file is not None:
-        df = pd.read_csv(uploaded_file)
-        
-        # Initialize session_state variables 
-        if 'tracking_df' not in st.session_state:
-            st.session_state.tracking_df = df.copy()
+        try:
+            df = pd.read_csv(uploaded_file)
+            
+            # Initialize session_state variables 
+            if 'tracking_df' not in st.session_state:
+                st.session_state.tracking_df = df.copy()
 
-        # Ensure 'date' has datetime objects and 'duration' has 
-        # timedelta objects
-        st.session_state.tracking_df['date'] = (
-            pd.to_datetime(st.session_state.tracking_df['date'])
-            )
-        st.session_state.tracking_df['duration'] = (
-            pd.to_timedelta(st.session_state.tracking_df['duration'])
-            )
+            # Ensure 'date' has datetime objects and 'duration' has 
+            # timedelta objects
+            st.session_state.tracking_df['date'] = (
+                pd.to_datetime(st.session_state.tracking_df['date'])
+                )
+            st.session_state.tracking_df['duration'] = (
+                pd.to_timedelta(st.session_state.tracking_df['duration'])
+                )
 
-        # Check if the data is up to date
-        today = dt.datetime.today().date()
-        latest_date = st.session_state.tracking_df['date'].iloc[-1].date()
-        if latest_date < today:
-            # Update the session_state DataFrame
-            next_date = latest_date + dt.timedelta(days=1)
-            st.session_state.tracking_df = (update_data3(df, next_date))
+            # Check if the data is up to date
+            today = dt.datetime.today().date()
+            latest_date = st.session_state.tracking_df['date'].iloc[-1].date()
+            if latest_date < today:
+                # Update the session_state DataFrame
+                next_date = latest_date + dt.timedelta(days=1)
+                st.session_state.tracking_df = (update_data3(df, next_date))
 
-        # Check again due to Streamlit's execution flow
-        latest_date = st.session_state.tracking_df['date'].iloc[-1].date()
-        if latest_date >= today:
-            up_to_date_download(st.session_state.tracking_df)
-            st.divider()
-            show_all_data_info(st.session_state.tracking_df)
+            # Check again due to Streamlit's execution flow
+            latest_date = st.session_state.tracking_df['date'].iloc[-1].date()
+            if latest_date >= today:
+                # Display a download option and data insights
+                up_to_date_download(st.session_state.tracking_df)
+                st.divider()
+                show_all_data_info(st.session_state.tracking_df)
+                
+        except pd.errors.ParserError:
+            st.error('This file cannot be used due to formatting '
+                     "issues. Please make sure you're using a file "
+                     'that was created with this site and not modified '
+                     'anywhere else.')
 
 elif mode == 'Preview app features using test data':
     # Get all the CSV filenames in the 'test_data' subdirectory and 
