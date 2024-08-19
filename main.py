@@ -31,8 +31,8 @@ def main():
     if mode == '(welcome screen)':
         '### Welcome — try out any of the modes above'
         'or...'
-        '###### [Read more on GitHub](https://github.com/noahkawaguchi/ichiman)'
-        '###### [Contact me through my website](https://www.noahkawaguchi.com/)'
+        '##### [Read more on GitHub](https://github.com/noahkawaguchi/ichiman)'
+        '##### [Contact me through my website](https://www.noahkawaguchi.com/)'
 
     elif mode == 'Start a new habit':
         modes.new_habit()
