@@ -68,28 +68,32 @@ def update_data3(df: pd.DataFrame, date_cursor: dt.date) -> pd.DataFrame:
         # Collect the hours and minutes from the user
         c1, c2 = duration_form.columns(2)
         with c1:
-            new_duration_hours = st.number_input(
+            st.number_input(
                 'Hours (type or use − +):',
                 min_value=0,
                 max_value=23,
                 value=0,
                 step=1,
                 format='%d',
+                key='new_duration_hours',
             )
         with c2:
-            new_duration_minutes = st.number_input(
+            st.number_input(
                 'Minutes (type or use − +):',
                 min_value=0,
                 max_value=59,
                 value=0,
                 step=1,
                 format='%d',
+                key='new_duration_minutes',
             )
 
         def record_and_advance():
             # Convert the user's input into a DataFrame
-            new_duration = dt.timedelta(hours=new_duration_hours,
-                                        minutes=new_duration_minutes)
+            new_duration = dt.timedelta(
+                hours=st.session_state.new_duration_hours,
+                minutes=st.session_state.new_duration_minutes
+                )
             new_row = pd.DataFrame({'date': [st.session_state.date_cursor],
                                     'duration': [new_duration]})
             new_row['date'] = pd.to_datetime(new_row['date'])
