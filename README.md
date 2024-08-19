@@ -1,5 +1,9 @@
 # Ichiman: Daily Habit Duration Tracker
 
+### 🔗 [Live link here](https://ichiman.streamlit.app)
+
+<br>
+
 （日本語版は英語版の下にあります。）
 
 Ichiman (pronounced "ee-chee-mon") is a daily habit tracker web app built using Streamlit. However, instead of just checking off whether you have completed the habit, it is based on recording the amount of time spent each day on a given task and gaining insights over time. Although "deliberate practice" is more important than the raw number of hours spent, understanding how we spend our time day to day is also undeniably crucial to optimizing personal growth. 
