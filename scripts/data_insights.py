@@ -89,7 +89,6 @@ def graph_data(df: pd.DataFrame) -> None:
         graph_df['duration'] = graph_df['duration'] / 60
         y_unit = 'Hours'
 
-
     # Resample the data by week and calculate the means for each week 
     # and month
     weekly_average = graph_df.resample('W').mean()
@@ -98,22 +97,27 @@ def graph_data(df: pd.DataFrame) -> None:
     # Set up the graph depending on the size of the data set
     plt.figure(figsize=(7,5), dpi=150)
     if len(graph_df) < 15:
-        plt.plot(graph_df.index, graph_df['duration'], color='red', marker='o', label='Daily Data')
+        plt.plot(graph_df.index, graph_df['duration'], color='red', 
+                 marker='o', label='Daily Data')
     elif len(graph_df) < 62:
-        plt.scatter(graph_df.index, graph_df['duration'], color='blue', marker='.', label='Daily Data')
+        plt.scatter(graph_df.index, graph_df['duration'], color='blue',
+                    marker='.', label='Daily Data')
         plt.plot(weekly_average.index, weekly_average['duration'], color='red', 
                  marker='o', label='Weekly Averages')
     else:
-        plt.scatter(graph_df.index, graph_df['duration'], color='gray', marker='.', label='Daily Data')
-        plt.plot(weekly_average.index, weekly_average['duration'], color='blue', 
-                 marker='.', linestyle='--', label='Weekly Averages')
+        plt.scatter(graph_df.index, graph_df['duration'], color='gray',
+                    marker='.', label='Daily Data')
+        plt.plot(weekly_average.index, weekly_average['duration'],
+                 color='blue', marker='.', linestyle='--',
+                 label='Weekly Averages')
         plt.plot(monthly_average.index, monthly_average['duration'], 
                  color='red', marker='o', label='Monthly Averages')
     plt.title('Time Spent Per Day')
     plt.xlabel('Dates')
     plt.ylabel(y_unit)
 
-    # Use AutoDateLocator to automatically select appropriate date intervals
+    # Use AutoDateLocator to automatically select appropriate date 
+    # intervals
     locator = mdates.AutoDateLocator()
     plt.gca().xaxis.set_major_locator(locator)
 
