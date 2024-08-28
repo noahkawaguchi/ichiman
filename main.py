@@ -14,8 +14,8 @@ def main():
     with c1:
         st.title('ichiman')
         '[ee-chee-mon]　*noun*'
-        st.caption('1. the number ten thousand in Japanese \n2. a duration-'
-                'based habit tracker developed by Noah Kawaguchi')
+        st.caption('1. the number ten thousand in Japanese\n'
+                   '2. a duration-based habit tracking web app')
     with c2:
         mode = st.radio(
             'Select a mode to begin:',
@@ -31,8 +31,8 @@ def main():
     if mode == '(welcome screen)':
         '### Welcome — try out any of the modes above'
         'or...'
-        '##### [Read more on GitHub](https://github.com/noahkawaguchi/ichiman)'
-        '##### [Contact me through my website](https://www.noahkawaguchi.com/)'
+        st.write('##### [Check out this project on GitHub]'
+                 '(https://github.com/noahkawaguchi/ichiman)')
 
     elif mode == 'Start a new habit':
         modes.new_habit()
@@ -44,7 +44,7 @@ def main():
         modes.data_preview()
 
     st.divider()
-    st.caption('Copyright © 2024 Noah Kawaguchi. All rights reserved.')
+    st.caption('© 2024. All rights reserved.')
 
 if __name__ == "__main__":
     main()
