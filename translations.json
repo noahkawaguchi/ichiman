@@ -1,0 +1,10 @@
+{
+    "en": {
+        "greeting": "Hello",
+        "farewell": "Goodbye"
+    },
+    "ja": {
+        "greeting": "こんにちは",
+        "farewell": "さようなら"
+    }
+}

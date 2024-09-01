@@ -10,13 +10,19 @@ def main():
         layout='wide',
         )
 
-    c1, c2 = st.columns([2, 1])
+    c1, c2, c3 = st.columns([2, 1, 1])
     with c1:
         st.title('ichiman')
         '[ee-chee-mon]　*noun*'
         st.caption('1. the number ten thousand in Japanese\n'
                    '2. a duration-based habit tracking web app')
     with c2:
+        lang = st.radio('Language / 言語', ('English', '日本語'))
+        if lang == '日本語':
+            user_lang = 'ja'
+        else:
+            user_lang = 'en'
+    with c3:
         mode = st.radio(
             'Select a mode to begin:',
             ('(welcome screen)',
