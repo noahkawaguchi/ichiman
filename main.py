@@ -1,6 +1,7 @@
 import streamlit as st
 
 import scripts.menu_options as modes
+from scripts.i18n import get_translation as gt
 
 
 def main():
@@ -17,36 +18,36 @@ def main():
         st.caption('1. the number ten thousand in Japanese\n'
                    '2. a duration-based habit tracking web app')
     with c2:
-        lang = st.radio('Language / 言語', ('English', '日本語'))
-        if lang == '日本語':
-            user_lang = 'ja'
+        lang_selection = st.radio('Language / 言語', ('English', '日本語'))
+        if lang_selection == '日本語':
+            lang = 'ja'
         else:
-            user_lang = 'en'
+            lang = 'en'
     with c3:
         mode = st.radio(
-            'Select a mode to begin:',
-            ('(welcome screen)',
-            'Start a new habit',
-            'Track an existing habit',
-            'Preview data features using test data',
+            gt('select mode', lang),
+            (gt('welcome screen', lang),
+            gt('start new', lang),
+            gt('track existing', lang),
+            gt('data preview', lang),
             ),
         )
 
     st.divider()
 
-    if mode == '(welcome screen)':
+    if mode == gt('welcome screen', lang):
         '### Welcome — try out any of the modes above'
         'or...'
         st.write('##### [Check out this project on GitHub]'
                  '(https://github.com/noahkawaguchi/ichiman)')
 
-    elif mode == 'Start a new habit':
+    elif mode == gt('start new', lang):
         modes.new_habit()
     
-    elif mode == 'Track an existing habit':
+    elif mode == gt('track existing', lang):
         modes.track_habit()
 
-    elif mode == 'Preview data features using test data':
+    elif mode == gt('data preview', lang):
         modes.data_preview()
 
     st.divider()

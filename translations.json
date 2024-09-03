@@ -1,10 +1,16 @@
 {
     "en": {
-        "greeting": "Hello",
-        "farewell": "Goodbye"
+        "select mode": "Select a mode to begin:",
+        "welcome screen": "(welcome screen)",
+        "start new": "Start a new habit",
+        "track existing": "Track an existing habit",
+        "data preview": "Preview data features using test data"
     },
     "ja": {
-        "greeting": "こんにちは",
-        "farewell": "さようなら"
+        "select mode": "モードをお選びください：",
+        "welcome screen": "【ようこそ画面】",
+        "start new": "新しい習慣を始める",
+        "track existing": "習慣の記録を続ける",
+        "data preview": "テストデータを選んでデータの機能をプレビュー"
     }
 }
