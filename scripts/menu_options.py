@@ -7,6 +7,7 @@ import pandas as pd
 
 from .helpers import show_all_data_info, update_data, up_to_date_download
 from scripts.i18n import get_translation as gt
+from config import Lang
 
 
 def new_habit() -> None:
@@ -18,13 +19,13 @@ def new_habit() -> None:
     if 'starting_new' not in st.session_state:
         st.session_state.starting_new = False
 
-    st.write('### Start a new habit')
-    st.write('A journey of ten thousand hours begins with a single day.')
+    st.write(gt('menu.new', Lang.lang))
+    st.write(gt('menu.journey', Lang.lang))
 
     # The button clears other habits and displays the duration entry 
     # interface 
     start_button = st.button(
-        "Let's go!", 
+        gt('menu.letsgo', Lang.lang), 
         on_click=st.session_state.clear,
         )
     if start_button:
@@ -52,7 +53,7 @@ def track_habit() -> None:
     # Show a basic file upload interface
     c1, c2 = st.columns([1,2])
     with c1:
-        st.write('### Track an existing habit')
+        st.write(gt('menu.track', Lang.lang))
         st.write('Nice to see you again.')
     with c2:
         uploaded_file = st.file_uploader(

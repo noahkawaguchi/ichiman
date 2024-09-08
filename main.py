@@ -2,6 +2,7 @@ import streamlit as st
 
 import scripts.menu_options as modes
 from scripts.i18n import get_translation as gt
+from config import Lang
 
 
 def main():
@@ -20,32 +21,32 @@ def main():
     with c2:
         lang_selection = st.radio('Language / 言語', ('English', '日本語'))
         if lang_selection == '日本語':
-            lang = 'ja'
+            Lang.lang = 'ja'
         else:
-            lang = 'en'
+            Lang.lang = 'en'
     with c3:
         mode = st.radio(
-            gt('main.select', lang),
-            (gt('main.welcome', lang),
-            gt('main.new', lang),
-            gt('main.track', lang),
-            gt('main.preview', lang),
+            gt('main.select', Lang.lang),
+            (gt('main.welcome', Lang.lang),
+            gt('main.new', Lang.lang),
+            gt('main.track', Lang.lang),
+            gt('main.preview', Lang.lang),
             ),
         )
 
     st.divider()
 
-    if mode == gt('main.welcome', lang):
-        st.write(gt('main.welcome_try', lang))
-        st.write(gt('main.github', lang))
+    if mode == gt('main.welcome', Lang.lang):
+        st.write(gt('main.welcome_try', Lang.lang))
+        st.write(gt('main.github', Lang.lang))
 
-    elif mode == gt('main.new', lang):
+    elif mode == gt('main.new', Lang.lang):
         modes.new_habit()
     
-    elif mode == gt('main.track', lang):
+    elif mode == gt('main.track', Lang.lang):
         modes.track_habit()
 
-    elif mode == gt('main.preview', lang):
+    elif mode == gt('main.preview', Lang.lang):
         modes.data_preview()
 
     st.divider()

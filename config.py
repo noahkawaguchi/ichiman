@@ -1,0 +1,2 @@
+class Lang:
+    lang = 'en'

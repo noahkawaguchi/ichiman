@@ -10,7 +10,10 @@
             "github": "##### [Check out this project on GitHub](https://github.com/noahkawaguchi/ichiman)"
         },
         "menu": {
-            "new": ""
+            "new": "### Start a new habit",
+            "journey": "A journey of ten thousand hours begins with a single day.",
+            "letsgo": "Let's go!",
+            "track": "### Track an existing habit"
         }
     },
     "ja": {
@@ -24,7 +27,10 @@
             "github":"##### [このプロジェクトのGitHubはこちら](https://github.com/noahkawaguchi/ichiman)"
         },
         "menu": {
-            
+            "new": "### 新しい習慣を始める",
+            "journey": "「一万時間の旅も一日から」",
+            "letsgo": "行くぞ！",
+            "track": "### 習慣の記録を続ける"
         }
     }
 }
