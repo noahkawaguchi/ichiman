@@ -6,6 +6,7 @@ import streamlit as st
 import pandas as pd
 
 from .helpers import show_all_data_info, update_data, up_to_date_download
+from scripts.i18n import get_translation as gt
 
 
 def new_habit() -> None:
@@ -120,7 +121,7 @@ def data_preview() -> None:
         st.write('### Preview data features using test data')
     with c2:
         selected_test_data = st.selectbox(
-            'short, medium, or long term', 
+            '<this is a hidden label>', 
             ['(choose one)'] + existing_habit_names,
             label_visibility='hidden'
             )

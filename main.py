@@ -25,29 +25,27 @@ def main():
             lang = 'en'
     with c3:
         mode = st.radio(
-            gt('select mode', lang),
-            (gt('welcome screen', lang),
-            gt('start new', lang),
-            gt('track existing', lang),
-            gt('data preview', lang),
+            gt('main.select', lang),
+            (gt('main.welcome', lang),
+            gt('main.new', lang),
+            gt('main.track', lang),
+            gt('main.preview', lang),
             ),
         )
 
     st.divider()
 
-    if mode == gt('welcome screen', lang):
-        '### Welcome — try out any of the modes above'
-        'or...'
-        st.write('##### [Check out this project on GitHub]'
-                 '(https://github.com/noahkawaguchi/ichiman)')
+    if mode == gt('main.welcome', lang):
+        st.write(gt('main.welcome_try', lang))
+        st.write(gt('main.github', lang))
 
-    elif mode == gt('start new', lang):
+    elif mode == gt('main.new', lang):
         modes.new_habit()
     
-    elif mode == gt('track existing', lang):
+    elif mode == gt('main.track', lang):
         modes.track_habit()
 
-    elif mode == gt('data preview', lang):
+    elif mode == gt('main.preview', lang):
         modes.data_preview()
 
     st.divider()

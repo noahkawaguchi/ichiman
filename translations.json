@@ -1,16 +1,30 @@
 {
     "en": {
-        "select mode": "Select a mode to begin:",
-        "welcome screen": "(welcome screen)",
-        "start new": "Start a new habit",
-        "track existing": "Track an existing habit",
-        "data preview": "Preview data features using test data"
+        "main": {
+            "select": "Select a mode to begin:",
+            "welcome": "(welcome screen)",
+            "new": "Start a new habit",
+            "track": "Track an existing habit",
+            "preview": "Preview data features using test data",
+            "welcome_try": "### Welcome — try out any of the modes above\nor...",
+            "github": "##### [Check out this project on GitHub](https://github.com/noahkawaguchi/ichiman)"
+        },
+        "menu": {
+            "new": ""
+        }
     },
     "ja": {
-        "select mode": "モードをお選びください：",
-        "welcome screen": "【ようこそ画面】",
-        "start new": "新しい習慣を始める",
-        "track existing": "習慣の記録を続ける",
-        "data preview": "テストデータを選んでデータの機能をプレビュー"
+        "main": {
+            "select": "モードをお選びください：",
+            "welcome": "【ようこそ画面】",
+            "new": "新しい習慣を始める",
+            "track": "習慣の記録を続ける",
+            "preview": "テストデータを選んでデータの機能をプレビュー",
+            "welcome_try": "#### アプリへようこそ！上のモードを使ってみてください\nそれとも･･･",
+            "github":"##### [このプロジェクトのGitHubはこちら](https://github.com/noahkawaguchi/ichiman)"
+        },
+        "menu": {
+            
+        }
     }
 }
