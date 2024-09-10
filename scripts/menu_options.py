@@ -5,8 +5,9 @@ from glob import glob
 import streamlit as st
 import pandas as pd
 
-from .helpers import show_all_data_info, update_data, up_to_date_download
+from scripts.helpers import show_all_data_info, update_data, up_to_date_download
 from scripts.i18n import get_translation as gt
+from scripts.i18n import test_name_to_japanese
 from config import Lang
 
 
@@ -54,10 +55,10 @@ def track_habit() -> None:
     c1, c2 = st.columns([1,2])
     with c1:
         st.write(gt('menu.track', Lang.lang))
-        st.write('Nice to see you again.')
+        st.write(gt('menu.nice2CU', Lang.lang))
     with c2:
         uploaded_file = st.file_uploader(
-            'Upload a CSV file previously created with this site:', 
+            gt('menu.uploadCSV', Lang.lang), 
             type='csv',
             on_change=lambda: st.session_state.clear()
             )
@@ -98,12 +99,9 @@ def track_habit() -> None:
                 st.divider()
                 show_all_data_info(st.session_state.tracking_df)
 
-        except pd.errors.ParserError:
-            st.error('This file cannot be used due to formatting '
-                     "issues. Please make sure you're using a file "
-                     'that was created with this site and not modified '
-                     'anywhere else.')
-            
+        except (ValueError, pd.errors.ParserError):
+            st.error(gt('menu.upload_error', Lang.lang))
+
 def data_preview() -> None:
     """Give the user the option of several test data sets. 
     Display insights for the selected data set.
@@ -113,25 +111,33 @@ def data_preview() -> None:
     data_dir = os.path.join(os.getcwd(), 'test_data')
     csv_paths = glob(os.path.join(data_dir, '*.csv'))
     existing_CSVs = [os.path.basename(csv) for csv in csv_paths]
-    def filename_to_habit_name(filename: str) -> str:
+    def filename_to_test_name(filename: str) -> str:
         return filename.removesuffix('.csv').replace('_', ' ')
-    existing_habit_names = [filename_to_habit_name(csv) for csv in existing_CSVs]
+    existing_test_names = [
+        filename_to_test_name(csv) for csv in existing_CSVs]
 
+    # Convert test names to Japanese if necessary
+    if Lang.lang == 'ja':
+        existing_test_names = [
+            test_name_to_japanese(tn) for tn in existing_test_names]
+
+    # Let the user choose one of the sets of test data
     c1, c2 = st.columns([1,2])
     with c1:
-        st.write('### Preview data features using test data')
+        st.write(gt('menu.preview', Lang.lang))
     with c2:
         selected_test_data = st.selectbox(
             '<this is a hidden label>', 
-            ['(choose one)'] + existing_habit_names,
+            [gt('menu.choose', Lang.lang)] + existing_test_names,
             label_visibility='hidden'
             )
     
     st.divider()
 
-    if selected_test_data != '(choose one)':
+    if selected_test_data != gt('menu.choose', Lang.lang):
         # Read in the CSV file corresponding to the chosen name and 
         # display data insights
-        filename = selected_test_data.replace(' ', '_') + '.csv'
+        filename = existing_CSVs[
+            existing_test_names.index(selected_test_data)]
         df = pd.read_csv('test_data/' + filename)
         show_all_data_info(df)

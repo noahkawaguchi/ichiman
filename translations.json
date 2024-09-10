@@ -13,7 +13,12 @@
             "new": "### Start a new habit",
             "journey": "A journey of ten thousand hours begins with a single day.",
             "letsgo": "Let's go!",
-            "track": "### Track an existing habit"
+            "track": "### Track an existing habit",
+            "nice2CU": "Nice to see you again.",
+            "uploadCSV": "Upload a CSV file previously created with this site:",
+            "upload_error": "This file cannot be used due to formatting issues. Please make sure you're using a file that was created with this site and not modified anywhere else.",
+            "preview": "### Preview data features using test data",
+            "choose": "(choose one)"
         }
     },
     "ja": {
@@ -30,7 +35,12 @@
             "new": "### 新しい習慣を始める",
             "journey": "「一万時間の旅も一日から」",
             "letsgo": "行くぞ！",
-            "track": "### 習慣の記録を続ける"
+            "track": "### 習慣の記録を続ける",
+            "nice2CU": "戻ってきてくれて嬉しいです",
+            "uploadCSV": "当サイトで作成されたCSVをアップロードしてください：",
+            "upload_error": "生憎、フォーマットエラーにより読み込むことができませんでした。ファイルが当サイト以外で編集されていないことをご確認ください。",
+            "preview": "#### テストデータを選んでデータの機能をプレビュー",
+            "choose": "（お選びください）"
         }
     }
 }
