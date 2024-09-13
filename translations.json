@@ -22,7 +22,10 @@
         },
         "avg": {
             "heading": "#### Daily averages",
-            "not_enough": "Not enough data for averages. Check back once you've recorded more days."
+            "not_enough": "Not enough data for averages. Check back once you've recorded more days.",
+            "overall": "Overall average ({} days): {} hr {} min",
+            "last7": "Average for the last 7 recorded days: {} hr {} min",
+            "last30": "Average for the last 30 recorded days: {} hr {} min"
         }
     },
     "ja": {
@@ -48,7 +51,10 @@
         },
         "avg": {
             "heading": "#### 一日平均時間",
-            "not_enough": "平均を計算するにはデータが足りません。もう少し記録してからこちらをまた見てみてください。"
+            "not_enough": "平均を計算するにはデータが足りません。もう少し記録してからこちらをまた見てみてください。",
+            "overall": "平均（全部で{}日間）：{}時間{}分",
+            "last7": "記録された過去7日間の平均：{}時間{}分",
+            "last30": "記録された過去30日間の平均：{}時間{}分"
         }
     }
 }

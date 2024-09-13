@@ -17,21 +17,25 @@ def daily_averages(df: pd.DataFrame) -> None:
         st.write(gt('avg.not_enough', Lang.lang))
     else:
         avg_duration = df['duration'].mean()
-        avg_duration_str = (f'{avg_duration.components.hours} hr '
-                            f'{avg_duration.components.minutes} min')
-        st.write(f'Overall average ({len(df)} days):', avg_duration_str)
+        st.write(gt('avg.overall', Lang.lang).format(
+            len(df),
+            avg_duration.components.hours,
+            avg_duration.components.minutes,
+            ))
     if len(df) > 7:
         last7 = df.tail(7)
         last7avg = last7['duration'].mean()
-        last7avg_str = (f'{last7avg.components.hours} hr '
-                        f'{last7avg.components.minutes} min')
-        st.write(f'Average for the last 7 recorded days:', last7avg_str)
+        st.write(gt('avg.last7', Lang.lang).format(
+            last7avg.components.hours,
+            last7avg.components.minutes,
+            ))
     if len(df) > 30:
         last30 = df.tail(30)
         last30avg = last30['duration'].mean()
-        last30avg_str = (f'{last30avg.components.hours} hr '
-                         f'{last30avg.components.minutes} min')
-        st.write(f'Average for the last 30 recorded days:', last30avg_str)
+        st.write(gt('avg.last30', Lang.lang).format(
+            last30avg.components.hours,
+            last30avg.components.minutes,
+            ))
 
 def goal_progress(df: pd.DataFrame) -> None:
     """Prompt the user to enter their goal number of hours. 
