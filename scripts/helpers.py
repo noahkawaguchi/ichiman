@@ -17,10 +17,8 @@ def show_all_data_info(df: pd.DataFrame) -> None:
 
     c1, c2 = st.columns([1, 2])
     with c1:
-        st.write('#### Daily averages')
         data.daily_averages(df_copy)
         st.divider()
-        st.write('#### Progress toward goal')
         data.goal_progress(df_copy)
         st.divider()
     with c2:

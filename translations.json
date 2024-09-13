@@ -19,6 +19,10 @@
             "upload_error": "This file cannot be used due to formatting issues. Please make sure you're using a file that was created with this site and not modified anywhere else.",
             "preview": "### Preview data features using test data",
             "choose": "(choose one)"
+        },
+        "avg": {
+            "heading": "#### Daily averages",
+            "not_enough": "Not enough data for averages. Check back once you've recorded more days."
         }
     },
     "ja": {
@@ -41,6 +45,10 @@
             "upload_error": "生憎、フォーマットエラーにより読み込むことができませんでした。ファイルが当サイト以外で編集されていないことをご確認ください。",
             "preview": "#### テストデータを選んでデータの機能をプレビュー",
             "choose": "（お選びください）"
+        },
+        "avg": {
+            "heading": "#### 一日平均時間",
+            "not_enough": "平均を計算するにはデータが足りません。もう少し記録してからこちらをまた見てみてください。"
         }
     }
 }

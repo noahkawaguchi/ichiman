@@ -3,15 +3,18 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
+from scripts.i18n import get_translation as gt
+from config import Lang
+
 def daily_averages(df: pd.DataFrame) -> None:
     """Display average time spent per day.
     Overall - if there are at least 2 days.
     Last 7 days - if there are over 7 days.
     Last 30 days - if there are over 30 days.
     """
+    st.write(gt('avg.heading', Lang.lang))
     if len(df) < 2:
-        st.write(("Not enough data for averages. Check back once "
-                "you've recorded more days."))
+        st.write(gt('avg.not_enough', Lang.lang))
     else:
         avg_duration = df['duration'].mean()
         avg_duration_str = (f'{avg_duration.components.hours} hr '
@@ -35,6 +38,8 @@ def goal_progress(df: pd.DataFrame) -> None:
     Display information on how much they have already completed and 
     how far they have left to go.
     """
+    st.write('#### Progress toward goal')
+
     # Get a positive integer goal from the user.
     user_goal = st.number_input(
         'Enter your goal in hours (type or use − +):',
