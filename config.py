@@ -1,2 +1,2 @@
 class Lang:
-    lang = 'en'
+    lang = 'en-US'

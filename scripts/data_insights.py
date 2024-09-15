@@ -3,8 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
-from scripts.i18n import get_translation as gt
 from config import Lang
+from scripts.i18n import get_translation as gt
+from scripts.i18n import localize_ConciseDateFormatter
 
 def daily_averages(df: pd.DataFrame) -> None:
     """Display average time spent per day.
@@ -42,11 +43,11 @@ def goal_progress(df: pd.DataFrame) -> None:
     Display information on how much they have already completed and 
     how far they have left to go.
     """
-    st.write('#### Progress toward goal')
+    st.write(gt('goal.heading', Lang.lang))
 
     # Get a positive integer goal from the user.
     user_goal = st.number_input(
-        'Enter your goal in hours (type or use − +):',
+        gt('goal.enter', Lang.lang),
         min_value=1,
         max_value=None,
         value=10000,
@@ -57,26 +58,24 @@ def goal_progress(df: pd.DataFrame) -> None:
     # When the user clicks the Calculate button, as long as they 
     # haven't already completed their goal, display how far they've 
     # come and how far they have left to go.
-    calculate = st.button('Calculate')
+    calculate = st.button(gt('goal.calculate', Lang.lang))
     if calculate:
         avg_duration = df['duration'].mean()
         time_completed = df['duration'].sum()
         total_hours = time_completed.total_seconds() / 3600
         if total_hours > user_goal:
-            st.write("You've already reached your goal. Congrats!")
+            st.write(gt('goal.reached', Lang.lang))
         else:
             percent_complete = total_hours / user_goal * 100
             hours_remaining = user_goal - total_hours
             avg_hours = avg_duration.total_seconds() / 3600
             days_remaining = hours_remaining / avg_hours
             years_remaining = days_remaining / 365
-            st.write((f'You have completed {total_hours:.1f} out of '
-                      f'{user_goal} hours, or {percent_complete:.0f} '
-                      'percent. If you maintain your average so far of '
-                      f'{avg_hours:.1f} hours per day, it will take '
-                      f'{days_remaining:.0f} more days, or '
-                      f'{years_remaining:.2f} years, to reach your '
-                      'goal.'))
+            st.write(gt('goal.progress', Lang.lang).format(
+                f'{total_hours:.1f}', f'{user_goal}',
+                f'{percent_complete:.0f}', f'{avg_hours:.1f}',
+                f'{days_remaining:.0f}', f'{years_remaining:.2f}',
+                ))
 
 def graph_data(df: pd.DataFrame) -> None:
     """Display a graph of the data.
@@ -93,36 +92,40 @@ def graph_data(df: pd.DataFrame) -> None:
     # hours otherwise
     graph_df['duration'] = graph_df['duration'].dt.total_seconds() / 60
     if max(graph_df['duration']) <= 120:
-        y_unit = 'Minutes'
+        y_unit = gt('graph.minutes', Lang.lang)
     else:
         graph_df['duration'] = graph_df['duration'] / 60
-        y_unit = 'Hours'
+        y_unit = gt('graph.hours', Lang.lang)
 
     # Resample the data by week and calculate the means for each week 
     # and month
     weekly_average = graph_df.resample('W').mean()
     monthly_average = graph_df.resample('ME').mean()
 
+    # Set pyplot to use a font that supports Japanese
+    plt.rcParams['font.family'] = ['Noto Sans JP', 'Hiragino Sans', 'Meiryo',
+                                   'TakaoPGothic', 'sans-serif']
+
     # Set up the graph depending on the size of the data set
     plt.figure(figsize=(7,5), dpi=150)
     if len(graph_df) < 15:
         plt.plot(graph_df.index, graph_df['duration'], color='red', 
-                 marker='o', label='Daily Data')
+                 marker='o', label=gt('graph.daily', Lang.lang))
     elif len(graph_df) < 62:
         plt.scatter(graph_df.index, graph_df['duration'], color='blue',
-                    marker='.', label='Daily Data')
+                    marker='.', label=gt('graph.daily', Lang.lang))
         plt.plot(weekly_average.index, weekly_average['duration'], color='red', 
-                 marker='o', label='Weekly Averages')
+                 marker='o', label=gt('graph.weekly', Lang.lang))
     else:
         plt.scatter(graph_df.index, graph_df['duration'], color='gray',
-                    marker='.', label='Daily Data')
+                    marker='.', label=gt('graph.daily', Lang.lang))
         plt.plot(weekly_average.index, weekly_average['duration'],
                  color='blue', marker='.', linestyle='--',
-                 label='Weekly Averages')
+                 label=gt('graph.weekly', Lang.lang))
         plt.plot(monthly_average.index, monthly_average['duration'], 
-                 color='red', marker='o', label='Monthly Averages')
-    plt.title('Time Spent Per Day')
-    plt.xlabel('Dates')
+                 color='red', marker='o', label=gt('graph.monthly', Lang.lang))
+    plt.title(gt('graph.title', Lang.lang))
+    plt.xlabel(gt('graph.dates', Lang.lang))
     plt.ylabel(y_unit)
 
     # Use AutoDateLocator to automatically select appropriate date 
@@ -130,9 +133,12 @@ def graph_data(df: pd.DataFrame) -> None:
     locator = mdates.AutoDateLocator()
     plt.gca().xaxis.set_major_locator(locator)
 
-    # Use ConciseDateFormatter to make the date labels more readable
-    plt.gca().xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
-
+    # Use ConciseDateFormatter to make the date labels more readable 
+    # depending on the user's language
+    formatter = mdates.ConciseDateFormatter(locator)
+    formatter = localize_ConciseDateFormatter(formatter, Lang.lang)
+    plt.gca().xaxis.set_major_formatter(formatter)
+    
     plt.legend()
     plt.grid(True)
     st.pyplot(plt)

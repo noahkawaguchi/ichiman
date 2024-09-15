@@ -23,7 +23,7 @@ def main():
         if lang_selection == '日本語':
             Lang.lang = 'ja'
         else:
-            Lang.lang = 'en'
+            Lang.lang = 'en-US'
     with c3:
         mode = st.radio(
             gt('main.select', Lang.lang),

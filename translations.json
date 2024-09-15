@@ -1,5 +1,5 @@
 {
-    "en": {
+    "en-US": {
         "main": {
             "select": "Select a mode to begin:",
             "welcome": "(welcome screen)",
@@ -26,6 +26,22 @@
             "overall": "Overall average ({} days): {} hr {} min",
             "last7": "Average for the last 7 recorded days: {} hr {} min",
             "last30": "Average for the last 30 recorded days: {} hr {} min"
+        },
+        "goal": {
+            "heading": "#### Progress toward goal",
+            "enter": "Enter your goal in hours:",
+            "calculate": "Calculate",
+            "reached": "You've already reached your goal. Congrats!",
+            "progress": "You have completed {} out of {} hours, or {} percent. If you maintain your average so far of {} hours per day, it will take {} more days, or {} years, to reach your goal."
+        },
+        "graph": {
+            "minutes": "Minutes",
+            "hours": "Hours",
+            "daily": "Daily Data",
+            "weekly": "Weekly Averages",
+            "monthly": "Monthly Averages",
+            "title": "Time Spent Per Day",
+            "dates": "Dates"
         }
     },
     "ja": {
@@ -55,6 +71,22 @@
             "overall": "平均（全部で{}日間）：{}時間{}分",
             "last7": "記録された過去7日間の平均：{}時間{}分",
             "last30": "記録された過去30日間の平均：{}時間{}分"
+        },
+        "goal": {
+            "heading": "#### 目標への進歩",
+            "enter": "目標を時間の単位でご入力ください：",
+            "calculate": "計算",
+            "reached": "目標を既に達成しました。おめでとうございます！",
+            "progress":"{1}時間のうち、{0}時間（{2}％）を完了しました。これまでの一日平均の{3}時間を維持すれば、目標達成までにあと{4}日（{5}年）がかかります。"
+        },
+        "graph": {
+            "minutes": "分間",
+            "hours": "時間数",
+            "daily": "日次データ",
+            "weekly": "週間平均",
+            "monthly": "月間平均",
+            "title": "一日ごとに費やした時間",
+            "dates": "日付"
         }
     }
 }
