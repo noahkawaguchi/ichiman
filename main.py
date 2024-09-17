@@ -1,3 +1,5 @@
+import locale
+
 import streamlit as st
 
 import scripts.menu_options as modes
@@ -19,11 +21,14 @@ def main():
         st.caption('1. the number ten thousand in Japanese\n'
                    '2. a duration-based habit tracking web app')
     with c2:
-        lang_selection = st.radio('Language / 言語', ('English', '日本語'))
+        lang_selection = st.radio('Language / 言語',('English', '日本語'),
+                                  on_change=st.session_state.clear)
         if lang_selection == '日本語':
             Lang.lang = 'ja'
+            locale.setlocale(locale.LC_ALL, 'ja_JP')
         else:
             Lang.lang = 'en-US'
+            locale.setlocale(locale.LC_ALL, 'en_US')
     with c3:
         mode = st.radio(
             gt('main.select', Lang.lang),

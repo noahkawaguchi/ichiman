@@ -103,8 +103,7 @@ def graph_data(df: pd.DataFrame) -> None:
     monthly_average = graph_df.resample('ME').mean()
 
     # Set pyplot to use a font that supports Japanese
-    plt.rcParams['font.family'] = ['Noto Sans JP', 'Hiragino Sans', 'Meiryo',
-                                   'TakaoPGothic', 'sans-serif']
+    plt.rcParams['font.family'] = ['Noto Sans JP', 'Hiragino Sans']
 
     # Set up the graph depending on the size of the data set
     plt.figure(figsize=(7,5), dpi=150)
@@ -142,20 +141,3 @@ def graph_data(df: pd.DataFrame) -> None:
     plt.legend()
     plt.grid(True)
     st.pyplot(plt)
-
-def display_data(df: pd.DataFrame) -> None:
-    """Display a DataFrame using human-readable dates and durations."""
-    format_df = df.copy()
-    format_df['date'] = format_df['date'].dt.strftime('%a, %b %e, %Y')
-
-    # Show in minutes if the max is 2 hours or under, otherwise show in 
-    # hours
-    format_df['duration'] = format_df['duration'].dt.total_seconds() / 60
-    if max(format_df['duration']) <= 120:
-        format_df = format_df.rename(columns={'duration': 'minutes'})
-    else:
-        format_df['duration'] = format_df['duration'] / 60
-        format_df['duration'] = format_df['duration'].round(1)
-        format_df = format_df.rename(columns={'duration': 'hours'})
-    
-    st.dataframe(format_df, use_container_width=True)

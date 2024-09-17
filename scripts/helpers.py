@@ -4,6 +4,8 @@ import streamlit as st
 import pandas as pd
 
 from . import data_insights as data
+from scripts.i18n import localize_df_data
+from config import Lang
 
 def show_all_data_info(df: pd.DataFrame) -> None:
     """Display averages, goal progress, and a graph of the data."""
@@ -25,7 +27,8 @@ def show_all_data_info(df: pd.DataFrame) -> None:
         data.graph_data(df_copy)
     st.divider()
     with st.expander('Show all days'):
-        data.display_data(df_copy)
+        st.dataframe(localize_df_data(df_copy, Lang.lang),
+                     use_container_width=True)
 
 def update_data(df: pd.DataFrame, date_cursor: dt.date) -> pd.DataFrame:
     """Given the currently recorded dates and durations, prompt the 
@@ -106,7 +109,8 @@ def update_data(df: pd.DataFrame, date_cursor: dt.date) -> pd.DataFrame:
         if len(st.session_state.update_data_df) > 0:
             st.divider()
             reversed_df = st.session_state.update_data_df.iloc[::-1]
-            data.display_data(reversed_df)
+            st.dataframe(localize_df_data(reversed_df, Lang.lang),
+                         use_container_width=True)
 
         # Return a valid value to the caller function with every rerun 
         # of the page
