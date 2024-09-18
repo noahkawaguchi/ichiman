@@ -92,10 +92,10 @@ def graph_data(df: pd.DataFrame) -> None:
     # hours otherwise
     graph_df['duration'] = graph_df['duration'].dt.total_seconds() / 60
     if max(graph_df['duration']) <= 120:
-        y_unit = gt('graph.minutes', Lang.lang)
+        y_unit = gt('misc.minutes', Lang.lang)
     else:
         graph_df['duration'] = graph_df['duration'] / 60
-        y_unit = gt('graph.hours', Lang.lang)
+        y_unit = gt('misc.hours', Lang.lang)
 
     # Resample the data by week and calculate the means for each week 
     # and month
@@ -123,6 +123,7 @@ def graph_data(df: pd.DataFrame) -> None:
                  label=gt('graph.weekly', Lang.lang))
         plt.plot(monthly_average.index, monthly_average['duration'], 
                  color='red', marker='o', label=gt('graph.monthly', Lang.lang))
+    
     plt.title(gt('graph.title', Lang.lang))
     plt.xlabel(gt('graph.dates', Lang.lang))
     plt.ylabel(y_unit)

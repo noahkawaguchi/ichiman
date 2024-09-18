@@ -35,13 +35,29 @@
             "progress": "You have completed {} out of {} hours, or {} percent. If you maintain your average so far of {} hours per day, it will take {} more days, or {} years, to reach your goal."
         },
         "graph": {
-            "minutes": "Minutes",
-            "hours": "Hours",
             "daily": "Daily Data",
             "weekly": "Weekly Averages",
             "monthly": "Monthly Averages",
             "title": "Time Spent Per Day",
             "dates": "Dates"
+        },
+        "update": {
+            "not_up2date": "#### Your data is not up to date",
+            "enter": "##### Enter the amount of time for {}:",
+            "save": "Save"
+        },
+        "download": {
+            "up2date": "#### Your data is up to date!",
+            "range": "from {} to {}",
+            "name": "Name your file:",
+            "download": "Download (.csv)",
+            "unfortunately": "(Unfortunately, I can't store everyone's data, so this is currently the only way to save your progress between visits to this site.)"
+        },
+        "misc": {
+            "minutes": "Minutes",
+            "hours": "Hours",
+            "date_format": "%a, %b %e, %Y",
+            "show_all": "Show all days"
         }
     },
     "ja": {
@@ -80,13 +96,29 @@
             "progress":"{1}時間のうち、{0}時間（{2}％）を完了しました。これまでの一日平均の{3}時間を維持すれば、目標達成までにあと{4}日（{5}年）がかかります。"
         },
         "graph": {
-            "minutes": "分間",
-            "hours": "時間数",
             "daily": "日次データ",
             "weekly": "週間平均",
             "monthly": "月間平均",
             "title": "一日ごとに費やした時間",
             "dates": "日付"
+        },
+        "update": {
+            "not_up2date":"#### データが最新ではありません",
+            "enter":"##### {}に費やした時間をご入力ください：",
+            "save": "保存"
+        },
+        "download": {
+            "up2date": "#### データが最新です！",
+            "range": "{}から{}まで",
+            "name": "ファイル名をご入力ください：",
+            "download": "ダウンロード（.csv）",
+            "unfortunately": "※生憎、現在こちらでユーザーのデータを保存することができません。そのため、データをダウンロードしてご自身のデバイスに保存してください。"
+        },
+        "misc": {
+            "minutes": "分",
+            "hours": "時間",
+            "date_format": "%Y年%-m月%e日（%a）",
+            "show_all": "全ての日付を表示"
         }
     }
 }

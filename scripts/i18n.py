@@ -5,6 +5,8 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.dates as mdates
 
+from config import Lang
+
 
 file_path = Path(__file__).parents[1] / 'translations.json'
 with open(file_path, 'r') as tr:
@@ -67,26 +69,24 @@ def localize_df_data(df: pd.DataFrame, lang: str = 'en-US') -> pd.DataFrame:
     format_df = df.copy()
 
     # Change the date column to a readable format for the locale 
-    if lang == 'en-US':
-        format_df['date'] = format_df['date'].dt.strftime('%a, %b %e, %Y')
-    elif lang == 'ja':
-        format_df['date'] = format_df['date'].dt.strftime('%Y年%-m月%e日（%a）')
+    format_df['date'] = format_df['date'].dt.strftime(
+        get_translation('misc.date_format', Lang.lang)
+        )
+    if lang == 'ja':
         format_df = format_df.rename(columns={'date': '日付'})
 
     # Show in minutes if the max is 2 hours or under, otherwise show in 
     # hours
     format_df['duration'] = format_df['duration'].dt.total_seconds() / 60
     if max(format_df['duration']) <= 120:
-        if lang == 'en-US':
-            format_df = format_df.rename(columns={'duration': 'minutes'})
-        elif lang == 'ja':
-            format_df = format_df.rename(columns={'duration': '分間'})
+        format_df = format_df.rename(
+            columns={'duration': get_translation('misc.minutes', Lang.lang)}
+            )
     else:
         format_df['duration'] = format_df['duration'] / 60
         format_df['duration'] = format_df['duration'].round(1)
-        if lang == 'en-US':
-            format_df = format_df.rename(columns={'duration': 'hours'})
-        elif lang == 'ja':
-            format_df = format_df.rename(columns={'duration': '時間数'})
+        format_df = format_df.rename(
+            columns={'duration': get_translation('misc.hours', Lang.lang)}
+            )
     
     return format_df

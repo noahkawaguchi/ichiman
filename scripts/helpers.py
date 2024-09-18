@@ -3,7 +3,8 @@ import datetime as dt
 import streamlit as st
 import pandas as pd
 
-from . import data_insights as data
+import scripts.data_insights as data
+from scripts.i18n import get_translation as gt
 from scripts.i18n import localize_df_data
 from config import Lang
 
@@ -12,8 +13,8 @@ def show_all_data_info(df: pd.DataFrame) -> None:
 
     df_copy = df.copy()
 
-    # Ensure the 'date' column is of datetime type and the 
-    # 'duration' column of timedelta type
+    # Ensure the 'date' column is of datetime type and the 'duration' 
+    # column of timedelta type
     df_copy['date'] = pd.to_datetime(df_copy['date'])
     df_copy['duration'] = pd.to_timedelta(df_copy['duration'])
 
@@ -26,7 +27,7 @@ def show_all_data_info(df: pd.DataFrame) -> None:
     with c2:
         data.graph_data(df_copy)
     st.divider()
-    with st.expander('Show all days'):
+    with st.expander(gt('misc.show_all', Lang.lang)):
         st.dataframe(localize_df_data(df_copy, Lang.lang),
                      use_container_width=True)
 
@@ -56,35 +57,23 @@ def update_data(df: pd.DataFrame, date_cursor: dt.date) -> pd.DataFrame:
     if st.session_state.date_cursor > today:
         return st.session_state.update_data_df
     else:
-        st.write('#### Your data is not up to date')
+        st.write(gt('update.not_up2date', Lang.lang))
 
         # Define the form container and write the date in question
         duration_form = st.form('duration_form')
-        formatted_date = st.session_state.date_cursor.strftime('%a, %b %e, %Y')
-        duration_form.write(f'#### Enter the amount of time for {formatted_date}')
+        formatted_date = st.session_state.date_cursor.strftime(gt('misc.date_format', Lang.lang))
+        duration_form.write(gt('update.enter', Lang.lang).format(formatted_date))
 
         # Collect the hours and minutes from the user
-        c1, c2 = duration_form.columns(2)
+        c1, c2, c3, c4 = duration_form.columns([5,1,5,1])
         with c1:
-            st.number_input(
-                'Hours (type or use − +):',
-                min_value=0,
-                max_value=23,
-                value=0,
-                step=1,
-                format='%d',
-                key='new_duration_hours',
-            )
-        with c2:
-            st.number_input(
-                'Minutes (type or use − +):',
-                min_value=0,
-                max_value=59,
-                value=0,
-                step=1,
-                format='%d',
-                key='new_duration_minutes',
-            )
+            st.number_input(gt('misc.hours', Lang.lang), min_value=0,
+                            max_value=23, value=0, step=1, format='%d',
+                            key='new_duration_hours')
+        with c3:
+            st.number_input(gt('misc.minutes', Lang.lang), min_value=0,
+                            max_value=59, value=0, step=1, format='%d',
+                            key='new_duration_minutes')
 
         def record_and_advance():
             # Convert the user's input into a DataFrame
@@ -103,7 +92,8 @@ def update_data(df: pd.DataFrame, date_cursor: dt.date) -> pd.DataFrame:
             # Increment the date cursor
             st.session_state.date_cursor += dt.timedelta(days=1)
 
-        duration_form.form_submit_button('Save', on_click=record_and_advance)
+        duration_form.form_submit_button(gt('update.save', Lang.lang),
+                                         on_click=record_and_advance)
 
         # Show the latest data as it is being updated
         if len(st.session_state.update_data_df) > 0:
@@ -134,30 +124,29 @@ def up_to_date_download(df: pd.DataFrame) -> None:
     # Display the up-to-date status of the data
     c1, c2 = st.columns(2)
     with c1:
-        earliest_date = df['date'].iloc[0].date().strftime('%a, %b %e, %Y')
-        latest_date = df['date'].iloc[-1].date().strftime('%a, %b %e, %Y')
-        st.write('#### Your data is up to date!')
+        earliest_date = df['date'].iloc[0].date().strftime(
+            gt('misc.date_format', Lang.lang)
+            )
+        latest_date = df['date'].iloc[-1].date().strftime(
+            gt('misc.date_format', Lang.lang)
+            )
+        st.write(gt('download.up2date', Lang.lang))
         if earliest_date == latest_date:
-            st.write(f'({latest_date})')
+            st.write(latest_date)
         else:
-            st.write(f'(from {earliest_date} to {latest_date})')
+            st.write(gt('download.range', Lang.lang).format(
+                earliest_date, latest_date,
+                ))
 
     # Display a basic interface to download the CSV file 
     with c2:
         c1, c2 = st.columns(2)
         with c1:
-            download_filename = st.text_input(
-                'Name your file:',
-                value='tracked_habit',
-            )
+            download_filename = st.text_input(gt('download.name', Lang.lang),
+                                              value='tracked_habit')
             download_filename = download_filename.replace(' ', '_') + '.csv'
-            st.download_button(
-                label="Download (.csv)",
-                data=csv,
-                file_name=download_filename,
-                mime='text/csv',
-                )
+            st.download_button(label=gt('download.download', Lang.lang),
+                               data=csv, file_name=download_filename,
+                               mime='text/csv')
         with c2:
-            st.write("(Unfortunately, I can't store everyone's data, "
-                    "so this is currently the only way to save your "
-                     "progress between visits to this site. )")
+            st.write(gt('download.unfortunately', Lang.lang))
