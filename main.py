@@ -1,5 +1,3 @@
-import locale
-
 import streamlit as st
 
 import scripts.menu_options as modes
@@ -25,10 +23,8 @@ def main():
                                   on_change=st.session_state.clear)
         if lang_selection == '日本語':
             Lang.lang = 'ja'
-            locale.setlocale(locale.LC_ALL, 'ja_JP.UTF-8')
         else:
             Lang.lang = 'en-US'
-            locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
     with c3:
         mode = st.radio(
             gt('main.select', Lang.lang),

@@ -117,7 +117,7 @@
         "misc": {
             "minutes": "分",
             "hours": "時間",
-            "date_format": "%Y年%-m月%e日（%a）",
+            "date_format": "%Y年%-m月%e日",
             "show_all": "全ての日付を表示"
         }
     }
