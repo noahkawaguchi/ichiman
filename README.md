@@ -23,11 +23,12 @@ Ichiman (pronounced "ee-chee-mon") is a daily habit tracker web app built using 
 - Calculate averages
 - Calculate progress toward goals
 - Create graphs that are responsive to the amount of data
-- Preview data insights using test data sets
+- Preview data insight features using test data
+- Full support for both English and Japanese
 
 ### Potential Features Under Consideration
+- More test data
 - More calculation options
-- Full support for Japanese
 
 <br>
 
@@ -53,8 +54,8 @@ Streamlitで作られた「Ichiman」とは、毎日何かの習慣を記録す�
 - 目標への進歩を計算
 - データの量によってスタイルが変わるグラフを作る
 - テストデータでアプリの計算とグラフの機能をプレビュー
+- 英語・日本語対応
 
 ### 検討している機能
-- より多くの計算
-- 日本語のUI（現在は英語のみ）
-
+- より多くのテストデータ
+- より多くの計算の機能
