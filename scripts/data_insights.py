@@ -1,8 +1,10 @@
+import os
+
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from matplotlib import font_manager
+import matplotlib.font_manager as fm
 
 from config import Lang
 from scripts.i18n import get_translation as gt
@@ -103,10 +105,16 @@ def graph_data(df: pd.DataFrame) -> None:
     weekly_average = graph_df.resample('W').mean()
     monthly_average = graph_df.resample('ME').mean()
 
-    # Set pyplot to use a font that supports Japanese
-    font_path = 'fonts/NotoSansJP-VariableFont_wght.ttf'
-    font_prop = font_manager.FontProperties(fname=font_path)
-    plt.rcParams['font.family'] = font_prop.get_name()
+    if Lang.lang == 'ja':
+        # Set pyplot to use a font that supports Japanese
+        font_path = os.path.join('fonts', 'NotoSansJP-VariableFont_wght.ttf')
+        if not os.path.exists(font_path):
+            st.error('Font file not found:', font_path)
+        else:
+            font_prop = fm.FontProperties(fname=font_path)
+            fm.fontManager.addfont(font_path)
+            plt.rcParams['font.family'] = font_prop.get_name()
+            plt.rcParams['axes.unicode_minus'] = False
 
     # Set up the graph depending on the size of the data set
     plt.figure(figsize=(7,5), dpi=150)
