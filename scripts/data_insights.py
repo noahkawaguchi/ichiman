@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -106,7 +104,7 @@ def graph_data(df: pd.DataFrame) -> None:
     monthly_average = graph_df.resample('ME').mean()
 
     # Set pyplot to use a font that supports Japanese
-    font_path = Path(__file__).parents[1] / 'fonts/NotoSansJP-VariableFont_wght.ttf'
+    font_path = 'fonts/NotoSansJP-VariableFont_wght.ttf'
     font_prop = font_manager.FontProperties(fname=font_path)
     plt.rcParams['font.family'] = font_prop.get_name()
 
