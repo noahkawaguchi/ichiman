@@ -106,7 +106,7 @@ def graph_data(df: pd.DataFrame) -> None:
     monthly_average = graph_df.resample('ME').mean()
 
     if Lang.lang == 'ja':
-        # Set pyplot to use a font that supports Japanese
+        # Set up the pyplot font to properly display Japanese
         font_path = os.path.join('fonts', 'NotoSansJP-VariableFont_wght.ttf')
         if not os.path.exists(font_path):
             st.error('Font file not found:', font_path)
@@ -114,7 +114,8 @@ def graph_data(df: pd.DataFrame) -> None:
             font_prop = fm.FontProperties(fname=font_path)
             fm.fontManager.addfont(font_path)
             plt.rcParams['font.family'] = font_prop.get_name()
-            plt.rcParams['axes.unicode_minus'] = False
+            plt.rcParams['font.weight'] = '400' # Regular
+            plt.rcParams['axes.unicode_minus'] = False # Use ASCII minus
 
     # Set up the graph depending on the size of the data set
     plt.figure(figsize=(7,5), dpi=150)
