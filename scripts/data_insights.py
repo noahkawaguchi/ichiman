@@ -107,14 +107,13 @@ def graph_data(df: pd.DataFrame) -> None:
 
     if Lang.lang == 'ja':
         # Set up the pyplot font to properly display Japanese
-        font_path = os.path.join('fonts', 'NotoSansJP-VariableFont_wght.ttf')
+        font_path = os.path.join('fonts', 'NotoSansJP-Regular.ttf')
         if not os.path.exists(font_path):
             st.error('Font file not found:', font_path)
         else:
             font_prop = fm.FontProperties(fname=font_path)
             fm.fontManager.addfont(font_path)
             plt.rcParams['font.family'] = font_prop.get_name()
-            plt.rcParams['font.weight'] = '400' # Regular
             plt.rcParams['axes.unicode_minus'] = False # Use ASCII minus
 
     # Set up the graph depending on the size of the data set
