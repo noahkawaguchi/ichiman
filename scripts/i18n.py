@@ -35,6 +35,10 @@ def localize_ConciseDateFormatter(
     ret_CDF = copy.copy(arg_CDF)
 
     if lang == 'en-US':
+        # Set date formatting
+        ret_CDF.formats = ['%Y', '%b', '%e', # format yr/mo/day
+                           '%H:%M', '%H:%M', '%S.%f'] # not using hr/min/sec
+        
         # Set "zeros" to mostly the same formatting except for the 
         # beginning of the month amongst ticks of mostly days and the 
         # beginning of the year amongst ticks of mostly months
@@ -50,7 +54,7 @@ def localize_ConciseDateFormatter(
     elif lang == 'ja':
         # Change date formatting to Japanese
         ret_CDF.formats = ['%y年', '%-m月', '%e日', # format yr/mo/day
-                            '%H:%M', '%H:%M', '%S.%f'] # not using hr/min/sec
+                           '%H:%M', '%H:%M', '%S.%f'] # not using hr/min/sec
         
         # Set "zeros" to mostly the same formatting except for the 
         # beginning of the month amongst ticks of mostly days and the 
