@@ -35,9 +35,12 @@ def localize_ConciseDateFormatter(
     ret_CDF = copy.copy(arg_CDF)
 
     if lang == 'en-US':
-        # Set the formatting for the beginning of the month amongst 
-        # ticks of mostly days
+        # Set "zeros" to mostly the same formatting except for the 
+        # beginning of the month amongst ticks of mostly days and the 
+        # beginning of the year amongst ticks of mostly months
+        ret_CDF.zero_formats = [''] + ret_CDF.formats[:-1]
         ret_CDF.zero_formats[2] = '%b %e'
+        ret_CDF.zero_formats[1] = "%b '%y"
 
         # Make the "offset" string at the right of the axis in the 
         # standard order for US English 
@@ -50,12 +53,14 @@ def localize_ConciseDateFormatter(
                             '%H:%M', '%H:%M', '%S.%f'] # not using hr/min/sec
         
         # Set "zeros" to mostly the same formatting except for the 
-        # beginning of the month amongst ticks of mostly days
+        # beginning of the month amongst ticks of mostly days and the 
+        # beginning of the year amongst ticks of mostly months
         ret_CDF.zero_formats = [''] + ret_CDF.formats[:-1]
         ret_CDF.zero_formats[2] = '%-m月%e日'
+        ret_CDF.zero_formats[1] = '%y年%-m月'
 
         # Make the "offset" string at the right of the axis have
-        # Japanese formatting as well 
+        # Japanese formatting
         ret_CDF.offset_formats = ['', '%Y年', '%Y年%-m月', '%Y年%-m月%e日',
                                     '%Y年%-m月%e日', '%Y年%-m月%e日 %H:%M']
     
