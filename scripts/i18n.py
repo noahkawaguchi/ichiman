@@ -1,5 +1,6 @@
 import json
 import copy
+import datetime as dt
 from pathlib import Path
 
 import pandas as pd
@@ -70,6 +71,17 @@ def localize_ConciseDateFormatter(
     
     return ret_CDF
 
+def date_to_localized_string(date: dt.date) -> str:
+    """Format a date object into a human-readable string based on the 
+    user's language.
+    """
+    datestr = date.strftime(get_translation('misc.date_format', Lang.lang))
+    ja_days_of_the_week = ['（月）', '（火）', '（水）', '（木）',
+                           '（金）', '（土）', '（日）']
+    if Lang.lang == 'ja':
+        datestr += ja_days_of_the_week[date.weekday()]
+    return datestr
+
 def localize_df_data(df: pd.DataFrame, lang: str = 'en-US') -> pd.DataFrame:
     """Format a DataFrame using human-readable dates and durations 
     based on the user's language. 
@@ -78,9 +90,7 @@ def localize_df_data(df: pd.DataFrame, lang: str = 'en-US') -> pd.DataFrame:
     format_df = df.copy()
 
     # Change the date column to a readable format for the locale 
-    format_df['date'] = format_df['date'].dt.strftime(
-        get_translation('misc.date_format', Lang.lang)
-        )
+    format_df['date'] = format_df['date'].map(date_to_localized_string)
     if lang == 'ja':
         format_df = format_df.rename(columns={'date': '日付'})
 

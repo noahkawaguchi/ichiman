@@ -5,7 +5,7 @@ import pandas as pd
 
 import scripts.data_insights as data
 from scripts.i18n import get_translation as gt
-from scripts.i18n import localize_df_data
+from scripts.i18n import localize_df_data, date_to_localized_string
 from config import Lang
 
 def show_all_data_info(df: pd.DataFrame) -> None:
@@ -61,7 +61,7 @@ def update_data(df: pd.DataFrame, date_cursor: dt.date) -> pd.DataFrame:
 
         # Define the form container and write the date in question
         duration_form = st.form('duration_form')
-        formatted_date = st.session_state.date_cursor.strftime(gt('misc.date_format', Lang.lang))
+        formatted_date = date_to_localized_string(st.session_state.date_cursor)
         duration_form.write(gt('update.enter', Lang.lang).format(formatted_date))
 
         # Collect the hours and minutes from the user
@@ -124,12 +124,8 @@ def up_to_date_download(df: pd.DataFrame) -> None:
     # Display the up-to-date status of the data
     c1, c2 = st.columns(2)
     with c1:
-        earliest_date = df['date'].iloc[0].date().strftime(
-            gt('misc.date_format', Lang.lang)
-            )
-        latest_date = df['date'].iloc[-1].date().strftime(
-            gt('misc.date_format', Lang.lang)
-            )
+        earliest_date = date_to_localized_string(df['date'].iloc[0].date())
+        latest_date = date_to_localized_string(df['date'].iloc[-1].date())
         st.write(gt('download.up2date', Lang.lang))
         if earliest_date == latest_date:
             st.write(latest_date)
